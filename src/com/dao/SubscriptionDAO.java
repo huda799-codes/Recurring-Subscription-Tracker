@@ -12,25 +12,36 @@ public class SubscriptionDAO {
 
         try {
 
-            Connection con = DBConnection.getConnection();
+            Connection connection =
+                    DBConnection.getConnection();
 
             String query =
-                    "INSERT INTO subscriptions(name, category, amount, billing_cycle, next_billing_date, status) VALUES (?, ?, ?, ?, ?, ?)";
+                    "INSERT INTO subscriptions(service_name, amount, category, billing_cycle, next_billing_date) VALUES (?, ?, ?, ?, ?)";
 
-            PreparedStatement ps = con.prepareStatement(query);
+            PreparedStatement ps =
+                    connection.prepareStatement(query);
 
-            ps.setString(1, subscription.getServiceName());
-            ps.setString(2, subscription.getCategory());
-            ps.setDouble(3, subscription.getAmount());
-            ps.setString(4, subscription.getBillingCycle());
-            ps.setString(5, subscription.getNextBillingDate());
-            ps.setString(6, "ACTIVE");
+            ps.setString(1,
+                    subscription.getServiceName());
+
+            ps.setDouble(2,
+                    subscription.getAmount());
+
+            ps.setString(3,
+                    subscription.getCategory());
+
+            ps.setString(4,
+                    subscription.getBillingCycle());
+
+            ps.setString(5,
+                    subscription.getNextBillingDate());
 
             ps.executeUpdate();
 
-            System.out.println("Subscription Added");
+            connection.close();
 
         } catch (Exception e) {
+
             e.printStackTrace();
         }
     }

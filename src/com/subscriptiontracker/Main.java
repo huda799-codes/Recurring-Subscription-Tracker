@@ -1,6 +1,7 @@
-package com;
+package com.subscriptiontracker;
 
 import com.controller.SubscriptionController;
+import com.model.Subscription;
 
 import java.util.Scanner;
 
@@ -34,13 +35,16 @@ public class Main {
         System.out.print("Enter Next Billing Date (YYYY-MM-DD): ");
         String nextBillingDate = input.nextLine();
 
-        controller.addSubscription(
-                serviceName,
-                amount,
-                category,
-                billingCycle,
-                nextBillingDate
-        );
+        Subscription subscription =
+                new Subscription(
+                        serviceName,
+                        amount,
+                        category,
+                        billingCycle,
+                        nextBillingDate
+                );
+
+        controller.addSubscription(subscription);
 
         System.out.println();
         System.out.println("Subscription Saved Successfully!");

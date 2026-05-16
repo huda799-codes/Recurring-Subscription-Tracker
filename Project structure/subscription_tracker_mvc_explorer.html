@@ -1,0 +1,626 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+.explorer{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.4fr);gap:12px;min-height:520px;}
+.tree-panel{border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);overflow:hidden;background:var(--color-background-primary);}
+.detail-panel{border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);overflow:hidden;background:var(--color-background-primary);}
+.panel-header{padding:10px 14px;border-bottom:0.5px solid var(--color-border-tertiary);font-size:12px;font-weight:500;color:var(--color-text-secondary);background:var(--color-background-secondary);}
+.tree-body{padding:8px 4px;font-family:var(--font-mono);font-size:12px;}
+.tree-item{display:flex;align-items:center;gap:6px;padding:3px 8px;border-radius:6px;cursor:pointer;color:var(--color-text-secondary);transition:background 0.1s;}
+.tree-item:hover{background:var(--color-background-secondary);}
+.tree-item.active{background:var(--color-background-info);color:var(--color-text-info);}
+.tree-item.folder{color:var(--color-text-primary);font-weight:500;}
+.tree-item.layer-header{margin-top:8px;margin-bottom:2px;font-size:10px;font-weight:500;letter-spacing:0.06em;color:var(--color-text-tertiary);padding-left:8px;cursor:default;}
+.tree-item.layer-header:hover{background:transparent;}
+.indent1{padding-left:20px;}
+.indent2{padding-left:36px;}
+.indent3{padding-left:52px;}
+.dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
+.dot-purple{background:#534AB7;}
+.dot-teal{background:#1D9E75;}
+.dot-coral{background:#D85A30;}
+.dot-blue{background:#378ADD;}
+.dot-amber{background:#BA7517;}
+.dot-pink{background:#D4537E;}
+.dot-gray{background:#888780;}
+.dot-green{background:#639922;}
+.detail-body{padding:14px;}
+.detail-title{font-size:14px;font-weight:500;color:var(--color-text-primary);margin-bottom:4px;}
+.detail-path{font-size:11px;font-family:var(--font-mono);color:var(--color-text-tertiary);margin-bottom:10px;}
+.detail-desc{font-size:13px;color:var(--color-text-secondary);line-height:1.7;margin-bottom:12px;}
+.detail-role{font-size:11px;font-weight:500;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:6px;}
+.code-block{background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:10px 12px;font-family:var(--font-mono);font-size:11px;color:var(--color-text-secondary);line-height:1.8;overflow-x:auto;}
+.kw{color:#534AB7;font-weight:500;}
+.cn{color:#1D9E75;font-weight:500;}
+.cm{color:#888780;}
+.st{color:#D85A30;}
+.badge{display:inline-block;font-size:10px;font-weight:500;padding:2px 7px;border-radius:12px;margin-right:4px;margin-bottom:4px;}
+.badge-m{background:#EEEDFE;color:#3C3489;}
+.badge-v{background:#E1F5EE;color:#085041;}
+.badge-c{background:#FAECE7;color:#712B13;}
+.badge-s{background:#E6F1FB;color:#0C447C;}
+.badge-u{background:#FAEEDA;color:#633806;}
+@media(prefers-color-scheme:dark){
+  .badge-m{background:#26215C;color:#CECBF6;}
+  .badge-v{background:#04342C;color:#9FE1CB;}
+  .badge-c{background:#4A1B0C;color:#F5C4B3;}
+  .badge-s{background:#042C53;color:#B5D4F4;}
+  .badge-u{background:#412402;color:#FAC775;}
+}
+.layer-pill{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:500;margin-right:6px;margin-bottom:6px;}
+.lp-m{background:#EEEDFE;color:#3C3489;}
+.lp-v{background:#E1F5EE;color:#085041;}
+.lp-c{background:#FAECE7;color:#712B13;}
+.lp-s{background:#E6F1FB;color:#0C447C;}
+@media(prefers-color-scheme:dark){
+  .lp-m{background:#26215C;color:#CECBF6;}
+  .lp-v{background:#04342C;color:#9FE1CB;}
+  .lp-c{background:#4A1B0C;color:#F5C4B3;}
+  .lp-s{background:#042C53;color:#B5D4F4;}
+}
+.mvc-legend{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px;}
+</style>
+
+<div style="padding:1rem 0;">
+<div class="mvc-legend">
+  <span class="layer-pill lp-m">M — Model (data + OOP classes)</span>
+  <span class="layer-pill lp-v">V — View (HTML/CSS/JS frontend)</span>
+  <span class="layer-pill lp-c">C — Controller (Spring Boot REST)</span>
+  <span class="layer-pill lp-s">S — Service (business logic)</span>
+</div>
+
+<div class="explorer">
+
+<div class="tree-panel">
+  <div class="panel-header">SubTrack/ — project root</div>
+  <div class="tree-body">
+
+    <div class="tree-item layer-header">BACKEND — Java Spring Boot</div>
+
+    <div class="tree-item folder" onclick="show('root')">📁 src/main/java/com/subtrack/</div>
+
+    <div class="tree-item indent1 folder">📁 model/</div>
+    <div class="tree-item indent2 active" id="n-user" onclick="show('user')"><span class="dot dot-purple"></span>User.java</div>
+    <div class="tree-item indent2" id="n-sub" onclick="show('sub')"><span class="dot dot-purple"></span>Subscription.java</div>
+    <div class="tree-item indent2" id="n-payment" onclick="show('payment')"><span class="dot dot-purple"></span>PaymentRecord.java</div>
+    <div class="tree-item indent2" id="n-alert-model" onclick="show('alert-model')"><span class="dot dot-purple"></span>Alert.java</div>
+    <div class="tree-item indent2" id="n-summary" onclick="show('summary')"><span class="dot dot-purple"></span>SpendingSummary.java</div>
+
+    <div class="tree-item indent1 folder">📁 controller/</div>
+    <div class="tree-item indent2" id="n-authc" onclick="show('authc')"><span class="dot dot-coral"></span>AuthController.java</div>
+    <div class="tree-item indent2" id="n-subc" onclick="show('subc')"><span class="dot dot-coral"></span>SubscriptionController.java</div>
+    <div class="tree-item indent2" id="n-payc" onclick="show('payc')"><span class="dot dot-coral"></span>PaymentController.java</div>
+    <div class="tree-item indent2" id="n-alertc" onclick="show('alertc')"><span class="dot dot-coral"></span>AlertController.java</div>
+    <div class="tree-item indent2" id="n-analyticsc" onclick="show('analyticsc')"><span class="dot dot-coral"></span>AnalyticsController.java</div>
+    <div class="tree-item indent2" id="n-aic" onclick="show('aic')"><span class="dot dot-coral"></span>AIAdvisorController.java</div>
+
+    <div class="tree-item indent1 folder">📁 service/</div>
+    <div class="tree-item indent2" id="n-groq" onclick="show('groq')"><span class="dot dot-blue"></span>GroqService.java</div>
+    <div class="tree-item indent2" id="n-insight" onclick="show('insight')"><span class="dot dot-blue"></span>InsightService.java</div>
+    <div class="tree-item indent2" id="n-waste" onclick="show('waste')"><span class="dot dot-blue"></span>WasteDetectorService.java</div>
+    <div class="tree-item indent2" id="n-spending" onclick="show('spending')"><span class="dot dot-blue"></span>SpendingAnalyzerService.java</div>
+    <div class="tree-item indent2" id="n-scheduler" onclick="show('scheduler')"><span class="dot dot-blue"></span>AlertSchedulerService.java</div>
+    <div class="tree-item indent2" id="n-fileserv" onclick="show('fileserv')"><span class="dot dot-blue"></span>FileExportService.java</div>
+    <div class="tree-item indent2" id="n-userserv" onclick="show('userserv')"><span class="dot dot-blue"></span>UserService.java</div>
+
+    <div class="tree-item indent1 folder">📁 repository/</div>
+    <div class="tree-item indent2" id="n-userrepo" onclick="show('userrepo')"><span class="dot dot-green"></span>UserRepository.java</div>
+    <div class="tree-item indent2" id="n-subrepo" onclick="show('subrepo')"><span class="dot dot-green"></span>SubscriptionRepository.java</div>
+    <div class="tree-item indent2" id="n-payrepo" onclick="show('payrepo')"><span class="dot dot-green"></span>PaymentRepository.java</div>
+
+    <div class="tree-item indent1 folder">📁 config/</div>
+    <div class="tree-item indent2" id="n-sec" onclick="show('sec')"><span class="dot dot-gray"></span>SecurityConfig.java</div>
+    <div class="tree-item indent2" id="n-groqcfg" onclick="show('groqcfg')"><span class="dot dot-gray"></span>GroqConfig.java</div>
+
+    <div class="tree-item indent1 folder">📁 exception/</div>
+    <div class="tree-item indent2" id="n-exc" onclick="show('exc')"><span class="dot dot-amber"></span>GlobalExceptionHandler.java</div>
+
+    <div class="tree-item" id="n-main" onclick="show('main')">📄 SubTrackApplication.java</div>
+
+    <div class="tree-item layer-header" style="margin-top:10px;">RESOURCES</div>
+    <div class="tree-item indent1 folder">📁 src/main/resources/</div>
+    <div class="tree-item indent2" id="n-prop" onclick="show('prop')"><span class="dot dot-gray"></span>application.properties</div>
+    <div class="tree-item indent2" id="n-tips" onclick="show('tips')"><span class="dot dot-teal"></span>subscription_tips.txt</div>
+    <div class="tree-item indent2" id="n-rules" onclick="show('rules')"><span class="dot dot-teal"></span>category_rules.txt</div>
+
+    <div class="tree-item layer-header" style="margin-top:10px;">FRONTEND — View Layer</div>
+    <div class="tree-item folder" onclick="show('frontend')">📁 src/main/resources/static/</div>
+    <div class="tree-item indent1" id="n-index" onclick="show('index')"><span class="dot dot-teal"></span>index.html</div>
+    <div class="tree-item indent1 folder">📁 css/</div>
+    <div class="tree-item indent2" id="n-css" onclick="show('css')"><span class="dot dot-teal"></span>style.css</div>
+    <div class="tree-item indent1 folder">📁 js/</div>
+    <div class="tree-item indent2" id="n-apijs" onclick="show('apijs')"><span class="dot dot-teal"></span>api.js</div>
+    <div class="tree-item indent2" id="n-subjs" onclick="show('subjs')"><span class="dot dot-teal"></span>subscriptions.js</div>
+    <div class="tree-item indent2" id="n-analyticsjs" onclick="show('analyticsjs')"><span class="dot dot-teal"></span>analytics.js</div>
+    <div class="tree-item indent2" id="n-aijs" onclick="show('aijs')"><span class="dot dot-teal"></span>ai-advisor.js</div>
+    <div class="tree-item indent2" id="n-alertsjs" onclick="show('alertsjs')"><span class="dot dot-teal"></span>alerts.js</div>
+    <div class="tree-item indent1 folder">📁 pages/</div>
+    <div class="tree-item indent2" id="n-login" onclick="show('login')"><span class="dot dot-pink"></span>login.html</div>
+    <div class="tree-item indent2" id="n-dash" onclick="show('dash')"><span class="dot dot-pink"></span>dashboard.html</div>
+    <div class="tree-item indent2" id="n-subspg" onclick="show('subspg')"><span class="dot dot-pink"></span>subscriptions.html</div>
+    <div class="tree-item indent2" id="n-analytpg" onclick="show('analytpg')"><span class="dot dot-pink"></span>analytics.html</div>
+    <div class="tree-item indent2" id="n-aipg" onclick="show('aipg')"><span class="dot dot-pink"></span>ai-advisor.html</div>
+    <div class="tree-item indent2" id="n-alertspg" onclick="show('alertspg')"><span class="dot dot-pink"></span>alerts.html</div>
+    <div class="tree-item indent2" id="n-budgetpg" onclick="show('budgetpg')"><span class="dot dot-pink"></span>budget.html</div>
+
+    <div class="tree-item layer-header" style="margin-top:10px;">DATA STORAGE</div>
+    <div class="tree-item folder">📁 data/</div>
+    <div class="tree-item indent1" id="n-db" onclick="show('db')"><span class="dot dot-amber"></span>subtrack.db</div>
+    <div class="tree-item indent1" id="n-exports" onclick="show('exports')"><span class="dot dot-amber"></span>exports/</div>
+
+    <div class="tree-item layer-header" style="margin-top:10px;">PROJECT CONFIG</div>
+    <div class="tree-item" id="n-pom" onclick="show('pom')"><span class="dot dot-gray"></span>pom.xml</div>
+  </div>
+</div>
+
+<div class="detail-panel">
+  <div class="panel-header" id="detail-header">Click any file to see details</div>
+  <div class="detail-body" id="detail-body">
+    <div style="color:var(--color-text-tertiary);font-size:13px;padding-top:20px;text-align:center;">Select a file from the tree to view its role and sample code.</div>
+  </div>
+</div>
+
+</div>
+</div>
+
+<script>
+const data = {
+  root:{title:'SubTrack — root',path:'src/main/java/com/subtrack/',badges:['MVC Spring Boot'],desc:'Main Java package. All backend code lives here, split into model/, controller/, service/, repository/, config/. Follows standard Spring Boot MVC conventions.',code:''},
+  user:{title:'User.java',path:'model/User.java',badges:['M'],desc:'Core OOP model class. Represents a registered user. Annotated with @Entity for JPA/SQLite mapping. Demonstrates encapsulation (private fields + getters/setters). Can be extended by subclasses for different user tiers.',code:`<span class="cm">// MODEL layer — OOP entity</span>
+<span class="kw">@Entity</span> <span class="kw">@Table</span>(name = <span class="st">"users"</span>)
+<span class="kw">public class</span> <span class="cn">User</span> {
+  <span class="kw">@Id @GeneratedValue</span>
+  <span class="kw">private</span> Long id;
+  <span class="kw">private</span> String name, email, passwordHash;
+  <span class="kw">private double</span> monthlyBudget;
+  <span class="kw">private</span> String currency; <span class="cm">// "PKR" | "USD"</span>
+  <span class="kw">private</span> LocalDateTime createdAt;
+  <span class="cm">// getters / setters / constructors</span>
+}`},
+  sub:{title:'Subscription.java',path:'model/Subscription.java',badges:['M'],desc:'Core subscription entity. Holds all metadata about a subscription service. The base class that can be extended into StreamingSubscription, SoftwareSubscription etc. — demonstrates inheritance.',code:`<span class="kw">@Entity</span> <span class="kw">@Table</span>(name = <span class="st">"subscriptions"</span>)
+<span class="kw">public class</span> <span class="cn">Subscription</span> {
+  <span class="kw">@Id @GeneratedValue</span>
+  <span class="kw">private</span> Long id;
+  <span class="kw">@ManyToOne private</span> <span class="cn">User</span> user;
+  <span class="kw">private</span> String name, category, status;
+  <span class="kw">private double</span> price;
+  <span class="kw">private</span> String billingCycle; <span class="cm">// MONTHLY | YEARLY</span>
+  <span class="kw">private</span> LocalDate renewalDate;
+}`},
+  payment:{title:'PaymentRecord.java',path:'model/PaymentRecord.java',badges:['M'],desc:'Tracks every payment made for a subscription. Linked to Subscription via foreign key. Used by SpendingAnalyzerService to compute monthly totals and trends.',code:`<span class="kw">@Entity</span> <span class="kw">@Table</span>(name = <span class="st">"payment_records"</span>)
+<span class="kw">public class</span> <span class="cn">PaymentRecord</span> {
+  <span class="kw">@Id @GeneratedValue</span>
+  <span class="kw">private</span> Long id;
+  <span class="kw">@ManyToOne private</span> <span class="cn">Subscription</span> subscription;
+  <span class="kw">private double</span> amount;
+  <span class="kw">private</span> LocalDate paymentDate;
+  <span class="kw">private</span> String status; <span class="cm">// PAID | PENDING | FAILED</span>
+}`},
+  'alert-model':{title:'Alert.java',path:'model/Alert.java',badges:['M'],desc:'Represents a system alert. Abstract base class with type, message, and isRead flag. Subclasses: RenewalAlert, BudgetAlert, WasteAlert — demonstrates polymorphism via overridden trigger() method.',code:`<span class="kw">@Entity</span>
+<span class="kw">public class</span> <span class="cn">Alert</span> {
+  <span class="kw">@Id @GeneratedValue private</span> Long id;
+  <span class="kw">@ManyToOne private</span> <span class="cn">User</span> user;
+  <span class="kw">private</span> String type; <span class="cm">// RENEWAL | BUDGET | WASTE</span>
+  <span class="kw">private</span> String message;
+  <span class="kw">private</span> LocalDateTime triggerDate;
+  <span class="kw">private boolean</span> isRead = <span class="kw">false</span>;
+}`},
+  summary:{title:'SpendingSummary.java',path:'model/SpendingSummary.java',badges:['M'],desc:'A lightweight DTO (Data Transfer Object) returned by AnalyticsController. Carries monthly total, category breakdown map, and trend direction — used to populate the analytics charts on the frontend.',code:`<span class="kw">public class</span> <span class="cn">SpendingSummary</span> {
+  <span class="kw">private</span> String month;
+  <span class="kw">private double</span> totalSpent;
+  <span class="kw">private</span> Map&lt;String,Double&gt; categoryBreakdown;
+  <span class="kw">private</span> String trend; <span class="cm">// UP | DOWN | STABLE</span>
+  <span class="cm">// constructor, getters</span>
+}`},
+  authc:{title:'AuthController.java',path:'controller/AuthController.java',badges:['C'],desc:'Handles /api/auth/* endpoints. Receives login/register requests from the frontend, delegates to UserService, and returns JWT tokens. No business logic here — just routing.',code:`<span class="kw">@RestController</span>
+<span class="kw">@RequestMapping</span>(<span class="st">"/api/auth"</span>)
+<span class="kw">public class</span> <span class="cn">AuthController</span> {
+  <span class="kw">@Autowired private</span> <span class="cn">UserService</span> userService;
+
+  <span class="kw">@PostMapping</span>(<span class="st">"/login"</span>)
+  <span class="kw">public</span> ResponseEntity login(<span class="kw">@RequestBody</span> LoginRequest req) {
+    <span class="kw">return</span> userService.login(req.email, req.password);
+  }
+
+  <span class="kw">@PostMapping</span>(<span class="st">"/register"</span>)
+  <span class="kw">public</span> ResponseEntity register(<span class="kw">@RequestBody</span> <span class="cn">User</span> user) {
+    <span class="kw">return</span> userService.register(user);
+  }
+}`},
+  subc:{title:'SubscriptionController.java',path:'controller/SubscriptionController.java',badges:['C'],desc:'Handles full CRUD for subscriptions. GET /subscriptions returns all for logged-in user. POST /subscriptions adds new. PUT /:id edits. DELETE /:id removes. Also handles GET /subscriptions/export for file download.',code:`<span class="kw">@RestController</span>
+<span class="kw">@RequestMapping</span>(<span class="st">"/api/subscriptions"</span>)
+<span class="kw">public class</span> <span class="cn">SubscriptionController</span> {
+  <span class="kw">@GetMapping</span>
+  <span class="kw">public</span> List&lt;<span class="cn">Subscription</span>&gt; getAll(<span class="kw">@AuthUser</span> Long uid) {
+    <span class="kw">return</span> subRepo.findByUserId(uid);
+  }
+
+  <span class="kw">@PostMapping</span>
+  <span class="kw">public</span> <span class="cn">Subscription</span> create(<span class="kw">@RequestBody</span> <span class="cn">Subscription</span> s) {
+    s.setStatus(<span class="st">"ACTIVE"</span>);
+    <span class="kw">return</span> subRepo.save(s);
+  }
+}`},
+  payc:{title:'PaymentController.java',path:'controller/PaymentController.java',badges:['C'],desc:'Manages payment history. GET /payments returns all past payments for the user. GET /payments/upcoming returns subscriptions renewing in the next 7 days. POST /payments/record logs a manual payment.',code:`<span class="kw">@RestController @RequestMapping</span>(<span class="st">"/api/payments"</span>)
+<span class="kw">public class</span> <span class="cn">PaymentController</span> {
+  <span class="kw">@GetMapping</span>(<span class="st">"/upcoming"</span>)
+  <span class="kw">public</span> List&lt;<span class="cn">Subscription</span>&gt; getUpcoming(<span class="kw">@AuthUser</span> Long uid) {
+    LocalDate cutoff = LocalDate.now().plusDays(7);
+    <span class="kw">return</span> subRepo.findRenewingBefore(uid, cutoff);
+  }
+}`},
+  alertc:{title:'AlertController.java',path:'controller/AlertController.java',badges:['C'],desc:'Returns pending alerts for the user (renewal deadlines, budget exceeded, waste detected). Frontend polls this every 60 seconds to show banners. PATCH /alerts/:id/read marks alert as read.',code:`<span class="kw">@RestController @RequestMapping</span>(<span class="st">"/api/alerts"</span>)
+<span class="kw">public class</span> <span class="cn">AlertController</span> {
+  <span class="kw">@GetMapping</span>
+  <span class="kw">public</span> List&lt;<span class="cn">Alert</span>&gt; getPending(<span class="kw">@AuthUser</span> Long uid) {
+    <span class="kw">return</span> alertRepo.findUnreadByUser(uid);
+  }
+
+  <span class="kw">@PatchMapping</span>(<span class="st">"/{id}/read"</span>)
+  <span class="kw">public void</span> markRead(<span class="kw">@PathVariable</span> Long id) {
+    alertRepo.markAsRead(id);
+  }
+}`},
+  analyticsc:{title:'AnalyticsController.java',path:'controller/AnalyticsController.java',badges:['C'],desc:'Provides analytics data to power the charts. GET /analytics/monthly returns 6 months of spending. GET /analytics/category returns spending grouped by category. GET /analytics/trends detects if spending is rising.',code:`<span class="kw">@RestController @RequestMapping</span>(<span class="st">"/api/analytics"</span>)
+<span class="kw">public class</span> <span class="cn">AnalyticsController</span> {
+  <span class="kw">@GetMapping</span>(<span class="st">"/monthly"</span>)
+  <span class="kw">public</span> List&lt;<span class="cn">SpendingSummary</span>&gt; getMonthly(<span class="kw">@AuthUser</span> Long uid) {
+    <span class="kw">return</span> spendingAnalyzer.getMonthlyBreakdown(uid, 6);
+  }
+
+  <span class="kw">@GetMapping</span>(<span class="st">"/category"</span>)
+  <span class="kw">public</span> Map&lt;String,Double&gt; getByCategory(<span class="kw">@AuthUser</span> Long uid) {
+    <span class="kw">return</span> spendingAnalyzer.getCategoryTotals(uid);
+  }
+}`},
+  aic:{title:'AIAdvisorController.java',path:'controller/AIAdvisorController.java',badges:['C'],desc:'Bridges frontend AI chat to GroqService. POST /ai/analyze sends subscription data to Groq and returns AI insights. POST /ai/detect-waste calls WasteDetectorService. POST /ai/suggest returns optimization tips.',code:`<span class="kw">@RestController @RequestMapping</span>(<span class="st">"/api/ai"</span>)
+<span class="kw">public class</span> <span class="cn">AIAdvisorController</span> {
+  <span class="kw">@PostMapping</span>(<span class="st">"/analyze"</span>)
+  <span class="kw">public</span> String analyze(<span class="kw">@AuthUser</span> Long uid,
+                        <span class="kw">@RequestBody</span> String question) {
+    List&lt;<span class="cn">Subscription</span>&gt; subs = subRepo.findByUserId(uid);
+    String context = insightService.buildContext(subs);
+    <span class="kw">return</span> groqService.analyze(question, context);
+  }
+}`},
+  groq:{title:'GroqService.java',path:'service/GroqService.java',badges:['S'],desc:'Makes HTTP POST calls to Groq API with user subscription data + AI tips as context. Uses Java HttpClient. Parses JSON response with org.json. Implements AIService interface — can swap for GeminiService.',code:`<span class="kw">public class</span> <span class="cn">GroqService</span> <span class="kw">implements</span> <span class="cn">AIService</span> {
+  <span class="kw">private final</span> String URL = <span class="st">"https://api.groq.com/openai/v1/chat/completions"</span>;
+
+  <span class="kw">public</span> String analyze(String question, String context) {
+    String prompt = context + <span class="st">"\nUser: "</span> + question;
+    JSONObject body = <span class="kw">new</span> JSONObject()
+      .put(<span class="st">"model"</span>, <span class="st">"llama-3.1-8b-instant"</span>)
+      .put(<span class="st">"messages"</span>, <span class="kw">new</span> JSONArray().put(
+        <span class="kw">new</span> JSONObject().put(<span class="st">"role"</span>,<span class="st">"user"</span>).put(<span class="st">"content"</span>, prompt)));
+    <span class="cm">// send via HttpClient, parse response...</span>
+  }
+}`},
+  insight:{title:'InsightService.java',path:'service/InsightService.java',badges:['S'],desc:'Builds the AI prompt context. Reads subscription_tips.txt at startup, matches categories in the user\'s subscription list, and prepends relevant saving tips before the Groq API call — the RAG pattern for finance.',code:`<span class="kw">public class</span> <span class="cn">InsightService</span> {
+  <span class="kw">private</span> Map&lt;String,String&gt; tips; <span class="cm">// loaded at startup</span>
+
+  <span class="kw">public</span> String buildContext(List&lt;<span class="cn">Subscription</span>&gt; subs) {
+    StringBuilder ctx = <span class="kw">new</span> StringBuilder();
+    ctx.append(<span class="st">"User subscriptions:\n"</span>);
+    subs.forEach(s -> {
+      ctx.append(s.getName() + <span class="st">" - $"</span> + s.getPrice() + <span class="st">"\n"</span>);
+      <span class="kw">if</span>(tips.containsKey(s.getCategory()))
+        ctx.append(tips.get(s.getCategory()) + <span class="st">"\n"</span>);
+    });
+    <span class="kw">return</span> ctx.toString();
+  }
+}`},
+  waste:{title:'WasteDetectorService.java',path:'service/WasteDetectorService.java',badges:['S'],desc:'Detects financial waste. Checks for overlapping categories (e.g. 2+ streaming services), subscriptions with no payment in 60+ days, and services costing above category average. Returns list of waste findings.',code:`<span class="kw">public class</span> <span class="cn">WasteDetectorService</span> {
+  <span class="kw">public</span> List&lt;String&gt; detect(List&lt;<span class="cn">Subscription</span>&gt; subs) {
+    List&lt;String&gt; findings = <span class="kw">new</span> ArrayList&lt;&gt;();
+    Map&lt;String,Long&gt; catCount = subs.stream()
+      .collect(groupingBy(<span class="cn">Subscription</span>::getCategory, counting()));
+    catCount.forEach((cat, count) -> {
+      <span class="kw">if</span>(count > 1)
+        findings.add(<span class="st">"You have "</span> + count + <span class="st">" "</span> + cat + <span class="st">" subs"</span>);
+    });
+    <span class="kw">return</span> findings;
+  }
+}`},
+  spending:{title:'SpendingAnalyzerService.java',path:'service/SpendingAnalyzerService.java',badges:['S'],desc:'Core analytics engine. Groups payment records by month and category. Computes running totals, detects spending spikes (month-over-month increase > 20%), and returns structured SpendingSummary objects for charts.',code:`<span class="kw">public class</span> <span class="cn">SpendingAnalyzerService</span> {
+  <span class="kw">public</span> List&lt;<span class="cn">SpendingSummary</span>&gt; getMonthlyBreakdown(Long uid, <span class="kw">int</span> months) {
+    <span class="kw">return</span> paymentRepo.findByUserAndDateAfter(uid, cutoff)
+      .stream()
+      .collect(groupingBy(p -> p.getPaymentDate().getMonth()))
+      .entrySet().stream()
+      .map(e -> <span class="kw">new</span> <span class="cn">SpendingSummary</span>(e.getKey(), e.getValue()))
+      .collect(toList());
+  }
+}`},
+  scheduler:{title:'AlertSchedulerService.java',path:'service/AlertSchedulerService.java',badges:['S'],desc:'Background job that runs daily at midnight. Scans all subscriptions, finds any renewing within 3 or 7 days, and creates Alert records in the DB. Also fires BudgetAlert if monthly spending exceeds user\'s budget limit.',code:`<span class="kw">@Service</span>
+<span class="kw">public class</span> <span class="cn">AlertSchedulerService</span> {
+  <span class="kw">@Scheduled</span>(cron = <span class="st">"0 0 0 * * ?"</span>) <span class="cm">// daily midnight</span>
+  <span class="kw">public void</span> checkRenewals() {
+    LocalDate soon = LocalDate.now().plusDays(7);
+    subRepo.findRenewingBefore(soon).forEach(s -> {
+      Alert alert = <span class="kw">new</span> Alert(<span class="st">"RENEWAL"</span>,
+        s.getName() + <span class="st">" renews in 7 days"</span>);
+      alertRepo.save(alert);
+    });
+  }
+}`},
+  fileserv:{title:'FileExportService.java',path:'service/FileExportService.java',badges:['S'],desc:'File handling component — satisfies the OOP lab file I/O requirement. Uses BufferedWriter to export user subscription records to .csv or .json files in the data/exports/ folder. Also loads knowledge base files.',code:`<span class="kw">public class</span> <span class="cn">FileExportService</span> {
+  <span class="kw">public void</span> exportToCSV(List&lt;<span class="cn">Subscription</span>&gt; subs, String path)
+    <span class="kw">throws</span> IOException {
+    <span class="kw">try</span> (BufferedWriter bw = <span class="kw">new</span> BufferedWriter(
+         <span class="kw">new</span> FileWriter(path))) {
+      bw.write(<span class="st">"Name,Category,Price,RenewalDate\n"</span>);
+      <span class="kw">for</span> (<span class="cn">Subscription</span> s : subs) {
+        bw.write(s.getName() + <span class="st">","</span> + s.getCategory() + ...);
+        bw.newLine();
+      }
+    }
+  }
+}`},
+  userserv:{title:'UserService.java',path:'service/UserService.java',badges:['S'],desc:'Handles authentication logic — password hashing with BCrypt, JWT generation, login validation. Also manages user budget preferences. Called by AuthController.',code:`<span class="kw">public class</span> <span class="cn">UserService</span> {
+  <span class="kw">public</span> ResponseEntity login(String email, String password) {
+    <span class="cn">User</span> user = userRepo.findByEmail(email)
+      .orElseThrow(() -> <span class="kw">new</span> RuntimeException(<span class="st">"Not found"</span>));
+    <span class="kw">if</span>(!encoder.matches(password, user.getPasswordHash()))
+      <span class="kw">return</span> ResponseEntity.status(401).build();
+    String token = jwtUtil.generate(user.getId());
+    <span class="kw">return</span> ResponseEntity.ok(Map.of(<span class="st">"token"</span>, token));
+  }
+}`},
+  userrepo:{title:'UserRepository.java',path:'repository/UserRepository.java',badges:['S'],desc:'Spring Data JPA interface for the users table. Extends JpaRepository — gives you save(), findById(), delete() for free. Add custom queries like findByEmail() with a single method declaration.',code:`<span class="kw">public interface</span> <span class="cn">UserRepository</span>
+  <span class="kw">extends</span> JpaRepository&lt;<span class="cn">User</span>, Long&gt; {
+  Optional&lt;<span class="cn">User</span>&gt; findByEmail(String email);
+}`},
+  subrepo:{title:'SubscriptionRepository.java',path:'repository/SubscriptionRepository.java',badges:['S'],desc:'JPA repository for subscriptions. Custom queries: find all by user, find renewing before a date (for alerts), find by category (for waste detection).',code:`<span class="kw">public interface</span> <span class="cn">SubscriptionRepository</span>
+  <span class="kw">extends</span> JpaRepository&lt;<span class="cn">Subscription</span>, Long&gt; {
+  List&lt;<span class="cn">Subscription</span>&gt; findByUserId(Long userId);
+  List&lt;<span class="cn">Subscription</span>&gt; findByUserIdAndRenewalDateBefore(
+    Long userId, LocalDate date);
+}`},
+  payrepo:{title:'PaymentRepository.java',path:'repository/PaymentRepository.java',badges:['S'],desc:'JPA repository for payment records. Custom query to get all payments by user after a given date — used by SpendingAnalyzerService for monthly breakdown calculations.',code:`<span class="kw">public interface</span> <span class="cn">PaymentRepository</span>
+  <span class="kw">extends</span> JpaRepository&lt;<span class="cn">PaymentRecord</span>, Long&gt; {
+  List&lt;<span class="cn">PaymentRecord</span>&gt; findBySubscription_UserIdAndPaymentDateAfter(
+    Long userId, LocalDate date);
+}`},
+  sec:{title:'SecurityConfig.java',path:'config/SecurityConfig.java',badges:['S'],desc:'Spring Security configuration. Permits /api/auth/* without JWT. Requires authentication for all other routes. Registers the JwtAuthFilter to validate tokens on each request.',code:`<span class="kw">@Configuration</span>
+<span class="kw">public class</span> <span class="cn">SecurityConfig</span> {
+  <span class="kw">@Bean</span>
+  <span class="kw">public</span> SecurityFilterChain chain(HttpSecurity http) <span class="kw">throws</span> Exception {
+    http.authorizeHttpRequests(a -> a
+      .requestMatchers(<span class="st">"/api/auth/**"</span>).permitAll()
+      .anyRequest().authenticated());
+    <span class="kw">return</span> http.build();
+  }
+}`},
+  groqcfg:{title:'GroqConfig.java',path:'config/GroqConfig.java',badges:['S'],desc:'Stores the Groq API key (read from application.properties env variable) and the model name. Injected into GroqService via @Autowired. Never hardcode keys in source code.',code:`<span class="kw">@Configuration</span>
+<span class="kw">public class</span> <span class="cn">GroqConfig</span> {
+  <span class="kw">@Value</span>(<span class="st">"\${groq.api.key}"</span>)
+  <span class="kw">private</span> String apiKey;
+
+  <span class="kw">@Value</span>(<span class="st">"\${groq.model}"</span>)
+  <span class="kw">private</span> String model; <span class="cm">// llama-3.1-8b-instant</span>
+}`},
+  exc:{title:'GlobalExceptionHandler.java',path:'exception/GlobalExceptionHandler.java',badges:['S'],desc:'Catches all unhandled exceptions across every controller. Returns clean JSON error messages instead of raw stack traces. Demonstrates custom exception handling — key OOP practice for your lab.',code:`<span class="kw">@RestControllerAdvice</span>
+<span class="kw">public class</span> <span class="cn">GlobalExceptionHandler</span> {
+  <span class="kw">@ExceptionHandler</span>(Exception.class)
+  <span class="kw">public</span> ResponseEntity&lt;Map&gt; handle(Exception e) {
+    <span class="kw">return</span> ResponseEntity.status(500)
+      .body(Map.of(<span class="st">"error"</span>, e.getMessage()));
+  }
+}`},
+  main:{title:'SubTrackApplication.java',path:'SubTrackApplication.java',badges:['S'],desc:'Entry point of the Spring Boot application. One annotation starts the entire server on port 8080. Also triggers AlertSchedulerService to begin its daily background renewal check.',code:`<span class="kw">@SpringBootApplication</span>
+<span class="kw">@EnableScheduling</span>
+<span class="kw">public class</span> <span class="cn">SubTrackApplication</span> {
+  <span class="kw">public static void</span> main(String[] args) {
+    SpringApplication.run(
+      <span class="cn">SubTrackApplication</span>.class, args);
+  }
+}`},
+  prop:{title:'application.properties',path:'src/main/resources/application.properties',badges:['S'],desc:'App configuration. Sets port, SQLite DB path, JPA schema settings. Store your Groq API key as an environment variable — never hardcode in source files.',code:`server.port=8080
+spring.datasource.url=jdbc:sqlite:data/subtrack.db
+spring.datasource.driver-class-name=org.sqlite.JDBC
+spring.jpa.hibernate.ddl-auto=update
+groq.api.key=<span class="st">\${GROQ_API_KEY}</span>
+groq.model=llama-3.1-8b-instant`},
+  tips:{title:'subscription_tips.txt',path:'src/main/resources/subscription_tips.txt',badges:['V'],desc:'AI knowledge base for InsightService. Each entry has a CATEGORY keyword and a TIP. InsightService reads this at startup and injects matching tips into Groq prompts — the RAG pattern applied to personal finance.',code:`CATEGORY: streaming
+TIP: Most households only need 1-2 streaming services.
+Netflix + Prime + Disney+ costs ~$40/month combined.
+Pick 1 primary and rotate others quarterly.
+
+CATEGORY: software
+TIP: Check if your university provides free licenses for
+Adobe, Microsoft 365 or JetBrains before paying retail.
+
+CATEGORY: gaming
+TIP: Xbox Game Pass and PlayStation Plus overlap heavily.
+Keeping both is redundant for most users.`},
+  rules:{title:'category_rules.txt',path:'src/main/resources/category_rules.txt',badges:['V'],desc:'Rule definitions used by WasteDetectorService for rule-based overlap detection. Defines max sensible count per category before triggering a waste alert. Plain text so rules can be updated without recompiling.',code:`CATEGORY: streaming MAX: 2
+CATEGORY: music MAX: 1
+CATEGORY: cloud_storage MAX: 1
+CATEGORY: vpn MAX: 1
+CATEGORY: gaming MAX: 2
+CATEGORY: fitness MAX: 1
+
+<span class="cm"># WasteDetectorService reads this file at startup</span>
+<span class="cm"># and flags subscriptions exceeding MAX count per category</span>`},
+  index:{title:'index.html',path:'static/index.html',badges:['V'],desc:'Landing page. Shows app name "SubTrack", tagline, and Login / Get Started buttons. Redirects authenticated users straight to dashboard.html.',code:`<span class="kw">&lt;!DOCTYPE html&gt;</span>
+<span class="kw">&lt;html&gt;&lt;head&gt;</span>
+  <span class="kw">&lt;link</span> rel=<span class="st">"stylesheet"</span> href=<span class="st">"/css/style.css"</span><span class="kw">&gt;</span>
+<span class="kw">&lt;/head&gt;&lt;body&gt;</span>
+  <span class="kw">&lt;h1&gt;</span>SubTrack 💳<span class="kw">&lt;/h1&gt;</span>
+  <span class="kw">&lt;p&gt;</span>Take control of your subscriptions<span class="kw">&lt;/p&gt;</span>
+  <span class="kw">&lt;a</span> href=<span class="st">"/pages/login.html"</span><span class="kw">&gt;</span>Get Started<span class="kw">&lt;/a&gt;</span>
+<span class="kw">&lt;/body&gt;&lt;/html&gt;</span>`},
+  css:{title:'style.css',path:'static/css/style.css',badges:['V'],desc:'Global styles: colour palette (indigo + teal finance theme), typography, card/button/table components, alert badge styles, chart container layout. One file for the whole app.',code:`:root {
+  --primary: #534AB7;   <span class="cm">/* indigo */</span>
+  --accent: #1D9E75;    <span class="cm">/* teal */</span>
+  --danger: #E24B4A;    <span class="cm">/* red alerts */</span>
+  --warning: #E8A020;   <span class="cm">/* amber warnings */</span>
+  --bg: #f8f9fa;
+  --card-radius: 12px;
+}
+.sub-card { border-left: 3px solid var(--accent); }
+.alert-badge { background: var(--danger); color:#fff; }`},
+  apijs:{title:'api.js',path:'static/js/api.js',badges:['V'],desc:'Central fetch wrapper. All API calls go through here. Attaches JWT from localStorage to every request header. Other JS files import post() and get() from this module.',code:`<span class="kw">const</span> BASE = <span class="st">'/api'</span>;
+<span class="kw">const</span> token = () => localStorage.getItem(<span class="st">'token'</span>);
+
+<span class="kw">export async function</span> post(path, body) {
+  <span class="kw">const</span> res = <span class="kw">await</span> fetch(BASE + path, {
+    method: <span class="st">'POST'</span>,
+    headers: { <span class="st">'Content-Type'</span>: <span class="st">'application/json'</span>,
+               <span class="st">'Authorization'</span>: <span class="st">\`Bearer \${token()}\`</span> },
+    body: JSON.stringify(body)
+  });
+  <span class="kw">return</span> res.json();
+}`},
+  subjs:{title:'subscriptions.js',path:'static/js/subscriptions.js',badges:['V'],desc:'Fetches all subscriptions from /api/subscriptions and renders them as table rows. Handles Add, Edit, Delete button clicks. Calls /api/ai/detect-waste on load and shows a warning banner if waste is found.',code:`<span class="kw">import</span> { get, post, del } <span class="kw">from</span> <span class="st">'./api.js'</span>;
+
+<span class="kw">async function</span> loadSubscriptions() {
+  <span class="kw">const</span> subs = <span class="kw">await</span> get(<span class="st">'/subscriptions'</span>);
+  subs.forEach(s => {
+    table.innerHTML += <span class="st">\`&lt;tr&gt;
+      &lt;td&gt;\${s.name}&lt;/td&gt;
+      &lt;td&gt;$\${s.price}&lt;/td&gt;
+      &lt;td&gt;\${s.renewalDate}&lt;/td&gt;
+    &lt;/tr&gt;\`</span>;
+  });
+}`},
+  analyticsjs:{title:'analytics.js',path:'static/js/analytics.js',badges:['V'],desc:'Fetches /api/analytics/monthly and /api/analytics/category then draws charts using Chart.js. Bar chart for monthly spend trend. Doughnut chart for category breakdown. Updates automatically on page load.',code:`<span class="kw">import</span> { get } <span class="kw">from</span> <span class="st">'./api.js'</span>;
+
+<span class="kw">async function</span> drawCharts() {
+  <span class="kw">const</span> monthly = <span class="kw">await</span> get(<span class="st">'/analytics/monthly'</span>);
+  <span class="kw">new</span> Chart(barCanvas, {
+    type: <span class="st">'bar'</span>,
+    data: { labels: monthly.map(m=>m.month),
+            datasets:[{data: monthly.map(m=>m.totalSpent),
+                       backgroundColor: <span class="st">'#534AB7'</span>}] }
+  });
+}`},
+  aijs:{title:'ai-advisor.js',path:'static/js/ai-advisor.js',badges:['V'],desc:'Drives the AI Advisor chat panel. Sends user question to /api/ai/analyze, displays streaming reply as a chat bubble. Shows a "waste found" section if /api/ai/detect-waste returns findings.',code:`<span class="kw">import</span> { post } <span class="kw">from</span> <span class="st">'./api.js'</span>;
+
+<span class="kw">async function</span> askAdvisor() {
+  <span class="kw">const</span> question = input.value.trim();
+  appendBubble(<span class="st">'user'</span>, question);
+  <span class="kw">const</span> data = <span class="kw">await</span> post(<span class="st">'/ai/analyze'</span>,
+    { question, userId: getUID() });
+  appendBubble(<span class="st">'ai'</span>, data.insight);
+}`},
+  alertsjs:{title:'alerts.js',path:'static/js/alerts.js',badges:['V'],desc:'Polls /api/alerts every 60 seconds for new unread alerts. Shows a floating notification banner at the top of the page for renewal reminders and budget warnings. Clicking "Dismiss" calls PATCH /alerts/:id/read.',code:`<span class="kw">import</span> { get, patch } <span class="kw">from</span> <span class="st">'./api.js'</span>;
+
+<span class="kw">async function</span> pollAlerts() {
+  <span class="kw">const</span> alerts = <span class="kw">await</span> get(<span class="st">'/alerts'</span>);
+  alerts.forEach(a => showBanner(a));
+}
+setInterval(pollAlerts, 60000);`},
+  login:{title:'login.html',path:'static/pages/login.html',badges:['V'],desc:'Login and Register tabs. On submit calls /api/auth/login, saves JWT to localStorage, redirects to dashboard.html. Clean form — email + password, with a budget field on the register tab.',code:`<span class="kw">&lt;form</span> id=<span class="st">"loginForm"</span><span class="kw">&gt;</span>
+  <span class="kw">&lt;input</span> type=<span class="st">"email"</span> placeholder=<span class="st">"Email"</span><span class="kw">&gt;</span>
+  <span class="kw">&lt;input</span> type=<span class="st">"password"</span> placeholder=<span class="st">"Password"</span><span class="kw">&gt;</span>
+  <span class="kw">&lt;button&gt;</span>Sign In<span class="kw">&lt;/button&gt;</span>
+<span class="kw">&lt;/form&gt;</span>
+<span class="kw">&lt;script</span> type=<span class="st">"module"</span> src=<span class="st">"/js/auth.js"</span><span class="kw">&gt;&lt;/script&gt;</span>`},
+  dash:{title:'dashboard.html',path:'static/pages/dashboard.html',badges:['V'],desc:'Main hub after login. Summary cards at top: total monthly spend, number of active subscriptions, renewals due this week, waste detected. Nav bar links to all sections. Alert banner shows if unread alerts exist.',code:`<span class="kw">&lt;nav&gt;</span>
+  <span class="kw">&lt;a</span> href=<span class="st">"subscriptions.html"</span><span class="kw">&gt;</span>📋 Subscriptions<span class="kw">&lt;/a&gt;</span>
+  <span class="kw">&lt;a</span> href=<span class="st">"analytics.html"</span><span class="kw">&gt;</span>📊 Analytics<span class="kw">&lt;/a&gt;</span>
+  <span class="kw">&lt;a</span> href=<span class="st">"ai-advisor.html"</span><span class="kw">&gt;</span>🤖 AI Advisor<span class="kw">&lt;/a&gt;</span>
+  <span class="kw">&lt;a</span> href=<span class="st">"alerts.html"</span><span class="kw">&gt;</span>🔔 Alerts<span class="kw">&lt;/a&gt;</span>
+<span class="kw">&lt;/nav&gt;</span>
+<span class="kw">&lt;div</span> id=<span class="st">"alertBanner"</span><span class="kw">&gt;&lt;/div&gt;</span>`},
+  subspg:{title:'subscriptions.html',path:'static/pages/subscriptions.html',badges:['V'],desc:'Table of all active subscriptions with columns: Name, Category, Price, Renewal Date, Status, Actions. Add New Subscription button opens a modal form. Edit/Delete per row. Waste warning banner at top if duplicates found.',code:`<span class="kw">&lt;table</span> id=<span class="st">"subsTable"</span><span class="kw">&gt;</span>
+  <span class="kw">&lt;thead&gt;&lt;tr&gt;</span>
+    <span class="kw">&lt;th&gt;</span>Name<span class="kw">&lt;/th&gt;&lt;th&gt;</span>Category<span class="kw">&lt;/th&gt;&lt;th&gt;</span>Price<span class="kw">&lt;/th&gt;</span>
+    <span class="kw">&lt;th&gt;</span>Renews<span class="kw">&lt;/th&gt;&lt;th&gt;</span>Actions<span class="kw">&lt;/th&gt;</span>
+  <span class="kw">&lt;/tr&gt;&lt;/thead&gt;</span>
+  <span class="kw">&lt;tbody</span> id=<span class="st">"subsBody"</span><span class="kw">&gt;&lt;/tbody&gt;</span>
+<span class="kw">&lt;/table&gt;</span>
+<span class="kw">&lt;script</span> type=<span class="st">"module"</span> src=<span class="st">"/js/subscriptions.js"</span><span class="kw">&gt;&lt;/script&gt;</span>`},
+  analytpg:{title:'analytics.html',path:'static/pages/analytics.html',badges:['V'],desc:'Analytics dashboard. Bar chart: monthly spending for last 6 months. Doughnut chart: breakdown by category. Below: a trend message ("Your spending increased 15% this month"). Powered by Chart.js + analytics.js.',code:`<span class="kw">&lt;canvas</span> id=<span class="st">"monthlyChart"</span><span class="kw">&gt;&lt;/canvas&gt;</span>
+<span class="kw">&lt;canvas</span> id=<span class="st">"categoryChart"</span><span class="kw">&gt;&lt;/canvas&gt;</span>
+<span class="kw">&lt;div</span> id=<span class="st">"trendMessage"</span><span class="kw">&gt;&lt;/div&gt;</span>
+<span class="kw">&lt;script</span> src=<span class="st">"https://cdn.jsdelivr.net/npm/chart.js"</span><span class="kw">&gt;&lt;/script&gt;</span>
+<span class="kw">&lt;script</span> type=<span class="st">"module"</span> src=<span class="st">"/js/analytics.js"</span><span class="kw">&gt;&lt;/script&gt;</span>`},
+  aipg:{title:'ai-advisor.html',path:'static/pages/ai-advisor.html',badges:['V'],desc:'AI Expense Advisor chat panel. User types a question ("Am I overspending on streaming?"). AI reply appears as a chat bubble. Below the chat: a Waste Detected panel listing overlapping subscriptions and savings potential.',code:`<span class="kw">&lt;div</span> id=<span class="st">"aiMessages"</span> class=<span class="st">"chat-window"</span><span class="kw">&gt;&lt;/div&gt;</span>
+<span class="kw">&lt;div</span> class=<span class="st">"chat-input-row"</span><span class="kw">&gt;</span>
+  <span class="kw">&lt;input</span> id=<span class="st">"question"</span> placeholder=<span class="st">"Ask about your spending..."</span><span class="kw">&gt;</span>
+  <span class="kw">&lt;button</span> onclick=<span class="st">"askAdvisor()"</span><span class="kw">&gt;</span>Analyze<span class="kw">&lt;/button&gt;</span>
+<span class="kw">&lt;/div&gt;</span>
+<span class="kw">&lt;div</span> id=<span class="st">"wastePanel"</span><span class="kw">&gt;&lt;/div&gt;</span>
+<span class="kw">&lt;script</span> type=<span class="st">"module"</span> src=<span class="st">"/js/ai-advisor.js"</span><span class="kw">&gt;&lt;/script&gt;</span>`},
+  alertspg:{title:'alerts.html',path:'static/pages/alerts.html',badges:['V'],desc:'Alerts centre. Lists all unread alerts with type icons: 🔔 Renewal, ⚠️ Budget, 🗑️ Waste. Each shows the message and a Dismiss button. Sorted by urgency — renewals within 3 days shown first.',code:`<span class="kw">&lt;div</span> id=<span class="st">"alertsList"</span><span class="kw">&gt;&lt;/div&gt;</span>
+<span class="kw">&lt;script&gt;</span>
+  <span class="cm">// alerts.js loads and renders alerts here</span>
+  <span class="cm">// each alert rendered as:</span>
+  <span class="cm">// &lt;div class="alert-item renewal"&gt;</span>
+  <span class="cm">//   🔔 Netflix renews in 3 days ($15.99)</span>
+  <span class="cm">//   &lt;button onclick="dismiss(id)"&gt;Dismiss&lt;/button&gt;</span>
+  <span class="cm">// &lt;/div&gt;</span>
+<span class="kw">&lt;/script&gt;</span>`},
+  budgetpg:{title:'budget.html',path:'static/pages/budget.html',badges:['V'],desc:'Budget goal page. Input to set monthly budget limit. Progress bar shows current month spend vs budget. Green when safe, amber when 80% used, red when exceeded. Estimated yearly cost projection shown below.',code:`<span class="kw">&lt;input</span> type=<span class="st">"number"</span> id=<span class="st">"budgetInput"</span> placeholder=<span class="st">"Monthly budget ($)"</span><span class="kw">&gt;</span>
+<span class="kw">&lt;button</span> onclick=<span class="st">"saveBudget()"</span><span class="kw">&gt;</span>Set Budget<span class="kw">&lt;/button&gt;</span>
+<span class="kw">&lt;div</span> class=<span class="st">"progress-bar"</span><span class="kw">&gt;</span>
+  <span class="kw">&lt;div</span> id=<span class="st">"progressFill"</span><span class="kw">&gt;&lt;/div&gt;</span>
+<span class="kw">&lt;/div&gt;</span>
+<span class="kw">&lt;p</span> id=<span class="st">"yearlyProjection"</span><span class="kw">&gt;&lt;/p&gt;</span>`},
+  db:{title:'subtrack.db',path:'data/subtrack.db',badges:['S'],desc:'SQLite database file. Auto-created by Hibernate on first run. Contains tables: users, subscriptions, payment_records, alerts. No manual setup needed — Spring handles schema creation via ddl-auto=update.',code:`<span class="cm">-- Auto-generated by JPA/Hibernate</span>
+<span class="kw">CREATE TABLE</span> users (
+  id INTEGER PRIMARY KEY, name TEXT,
+  email TEXT UNIQUE, password_hash TEXT,
+  monthly_budget REAL, currency TEXT
+);
+<span class="kw">CREATE TABLE</span> subscriptions (
+  id INTEGER PRIMARY KEY, user_id INTEGER,
+  name TEXT, category TEXT, price REAL,
+  billing_cycle TEXT, renewal_date TEXT, status TEXT
+);
+<span class="kw">CREATE TABLE</span> payment_records (
+  id INTEGER PRIMARY KEY, subscription_id INTEGER,
+  amount REAL, payment_date TEXT, status TEXT
+);`},
+  exports:{title:'exports/',path:'data/exports/',badges:['S'],desc:'Folder created at runtime by FileExportService. Each export operation creates a timestamped file here: subscriptions_2025-06-01.csv or subscriptions_2025-06-01.json. This is the file handling component for your OOP lab requirement.',code:`data/exports/
+├── subscriptions_2025-05-01.csv
+│   Name,Category,Price,RenewalDate
+│   Netflix,streaming,15.99,2025-06-01
+│   Spotify,music,9.99,2025-06-15
+│   Adobe CC,software,54.99,2025-07-01
+├── subscriptions_2025-05-01.json
+│   [{"name":"Netflix","price":15.99,...},...]
+└── ...`},
+  pom:{title:'pom.xml',path:'pom.xml',badges:['S'],desc:'Maven build file. Declares all dependencies: Spring Boot, Spring Data JPA, SQLite JDBC, Spring Security, org.json for parsing Groq API responses, and Spring Scheduling for renewal alerts.',code:`<span class="kw">&lt;dependencies&gt;</span>
+  <span class="kw">&lt;dependency&gt;</span>spring-boot-starter-web<span class="kw">&lt;/dependency&gt;</span>
+  <span class="kw">&lt;dependency&gt;</span>spring-boot-starter-data-jpa<span class="kw">&lt;/dependency&gt;</span>
+  <span class="kw">&lt;dependency&gt;</span>spring-boot-starter-security<span class="kw">&lt;/dependency&gt;</span>
+  <span class="kw">&lt;dependency&gt;</span>sqlite-jdbc 3.45.0<span class="kw">&lt;/dependency&gt;</span>
+  <span class="kw">&lt;dependency&gt;</span>org.json 20240303<span class="kw">&lt;/dependency&gt;</span>
+<span class="kw">&lt;/dependencies&gt;</span>`},
+  frontend:{title:'static/ — View layer',path:'src/main/resources/static/',badges:['V'],desc:'Everything in this folder is served directly by Spring Boot as static files. The browser loads HTML, CSS, and JS from here. No separate frontend server needed — Spring Boot handles it all.',code:''}
+};
+
+let current = 'user';
+
+function show(key) {
+  if (!data[key]) return;
+  current = key;
+  document.querySelectorAll('.tree-item[id]').forEach(el => {
+    el.classList.remove('active');
+  });
+  const el = document.getElementById('n-'+key);
+  if (el) el.classList.add('active');
+
+  const d = data[key];
+  document.getElementById('detail-header').textContent = d.title;
+
+  const badges = (d.badges||[]).map(b => {
+    const cls = b==='M'?'badge-m':b==='V'?'badge-v':b==='C'?'badge-c':'badge-s';
+    const label = b==='M'?'Model':b==='V'?'View':b==='C'?'Controller':'Service/Config';
+    return `<span class="badge ${cls}">${label}</span>`;
+  }).join('');
+
+  document.getElementById('detail-body').innerHTML = `
+    <div class="detail-title">${d.title}</div>
+    <div class="detail-path">${d.path}</div>
+    <div style="margin-bottom:10px;">${badges}</div>
+    <div class="detail-desc">${d.desc}</div>
+    ${d.code ? `<div class="detail-role">Sample code</div><div class="code-block">${d.code}</div>` : ''}
+  `;
+}
+
+show('user');
+</script>

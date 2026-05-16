@@ -1,0 +1,476 @@
+
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: var(--font-sans); }
+  .section { margin-bottom: 2rem; }
+  .section-title { font-size: 11px; font-weight: 500; color: var(--color-text-tertiary); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 10px; padding-bottom: 6px; border-bottom: 0.5px solid var(--color-border-tertiary); }
+  .card { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 1rem 1.25rem; }
+  .badge { display: inline-block; font-size: 11px; font-weight: 500; padding: 2px 8px; border-radius: 20px; }
+  .badge-purple { background: #EEEDFE; color: #3C3489; }
+  .badge-teal { background: #E1F5EE; color: #085041; }
+  .badge-coral { background: #FAECE7; color: #712B13; }
+  .badge-blue { background: #E6F1FB; color: #0C447C; }
+  .badge-amber { background: #FAEEDA; color: #633806; }
+  .badge-green { background: #EAF3DE; color: #27500A; }
+  .badge-gray { background: #F1EFE8; color: #444441; }
+  @media (prefers-color-scheme: dark) {
+    .badge-purple { background: #26215C; color: #CECBF6; }
+    .badge-teal { background: #04342C; color: #9FE1CB; }
+    .badge-coral { background: #4A1B0C; color: #F5C4B3; }
+    .badge-blue { background: #042C53; color: #B5D4F4; }
+    .badge-amber { background: #412402; color: #FAC775; }
+    .badge-green { background: #173404; color: #C0DD97; }
+    .badge-gray { background: #2C2C2A; color: #D3D1C7; }
+  }
+  .week-card { border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-tertiary); background: var(--color-background-primary); overflow: hidden; margin-bottom: 8px; cursor: pointer; transition: border-color 0.15s; }
+  .week-card:hover { border-color: var(--color-border-secondary); }
+  .week-header { display: flex; align-items: center; gap: 12px; padding: 10px 14px; }
+  .week-num { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 500; flex-shrink: 0; }
+  .week-body { padding: 0 14px 12px; font-size: 13px; color: var(--color-text-secondary); line-height: 1.6; display: none; }
+  .week-body.open { display: block; }
+  .week-body ul { padding-left: 1rem; }
+  .week-body li { margin-bottom: 3px; }
+  .tech-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; }
+  .tech-item { background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 10px 12px; }
+  .tech-label { font-size: 11px; color: var(--color-text-tertiary); margin-bottom: 4px; }
+  .tech-value { font-size: 13px; font-weight: 500; color: var(--color-text-primary); }
+  .feature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; }
+  .feature-card { border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-md); padding: 12px; }
+  .feature-icon { font-size: 16px; margin-bottom: 6px; }
+  .feature-title { font-size: 13px; font-weight: 500; color: var(--color-text-primary); margin-bottom: 4px; }
+  .feature-desc { font-size: 12px; color: var(--color-text-secondary); line-height: 1.5; }
+  .oop-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 8px; }
+  .oop-item { display: flex; align-items: flex-start; gap: 10px; padding: 10px 12px; border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-md); }
+  .oop-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; margin-top: 5px; }
+  .oop-text { font-size: 13px; font-weight: 500; color: var(--color-text-primary); }
+  .oop-sub { font-size: 12px; color: var(--color-text-secondary); margin-top: 2px; }
+  .header-block { background: var(--color-background-secondary); border-radius: var(--border-radius-lg); padding: 1.25rem; margin-bottom: 1.5rem; display: flex; gap: 16px; align-items: flex-start; }
+  .header-info { flex: 1; }
+  .project-name { font-size: 18px; font-weight: 500; color: var(--color-text-primary); margin-bottom: 6px; }
+  .meta-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+  .progress-bar { height: 4px; background: var(--color-border-tertiary); border-radius: 2px; margin-top: 10px; overflow: hidden; }
+  .progress-fill { height: 100%; border-radius: 2px; background: #1D9E75; width: 0%; transition: width 1s ease; }
+  .tab-row { display: flex; gap: 4px; margin-bottom: 1.5rem; flex-wrap: wrap; }
+  .tab { padding: 6px 14px; border-radius: 20px; font-size: 13px; cursor: pointer; border: 0.5px solid var(--color-border-tertiary); background: transparent; color: var(--color-text-secondary); transition: all 0.15s; }
+  .tab.active { background: var(--color-background-info); color: var(--color-text-info); border-color: transparent; }
+  .panel { display: none; }
+  .panel.active { display: block; }
+  .api-box { border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-md); padding: 12px; font-family: var(--font-mono); font-size: 12px; color: var(--color-text-secondary); background: var(--color-background-secondary); margin-top: 8px; line-height: 1.7; }
+  .highlight { color: #1D9E75; font-weight: 500; }
+  .highlight2 { color: #534AB7; font-weight: 500; }
+  .cv-badge { display: flex; align-items: center; gap: 8px; padding: 8px 12px; border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-tertiary); font-size: 13px; color: var(--color-text-primary); }
+  .cv-dot { width: 6px; height: 6px; border-radius: 50%; background: #1D9E75; flex-shrink: 0; }
+</style>
+
+<div style="padding: 1rem 0;">
+
+  <!-- Header -->
+  <div class="header-block">
+    <div class="header-info">
+      <div class="project-name">SubTrack — AI Recurring Subscription Tracker</div>
+      <div style="font-size: 13px; color: var(--color-text-secondary);">OOP Lab Semester Project &nbsp;·&nbsp; Full-Stack Java &nbsp;·&nbsp; 2025</div>
+      <div class="meta-row">
+        <span class="badge badge-purple">Java OOP</span>
+        <span class="badge badge-teal">Groq / Gemini API</span>
+        <span class="badge badge-blue">AI Expense Analysis</span>
+        <span class="badge badge-coral">Smart Alerts</span>
+        <span class="badge badge-amber">File Handling</span>
+        <span class="badge badge-green">4-Week Plan</span>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" id="pbar"></div></div>
+    </div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tab-row">
+    <button class="tab active" onclick="showTab('overview')">Overview</button>
+    <button class="tab" onclick="showTab('weeks')">Week-by-Week</button>
+    <button class="tab" onclick="showTab('tech')">Tech Stack</button>
+    <button class="tab" onclick="showTab('oop')">OOP Concepts</button>
+    <button class="tab" onclick="showTab('api')">API Setup</button>
+    <button class="tab" onclick="showTab('cv')">CV Points</button>
+  </div>
+
+  <!-- OVERVIEW -->
+  <div id="panel-overview" class="panel active">
+    <div class="section">
+      <div class="section-title">Core features</div>
+      <div class="feature-grid">
+        <div class="feature-card">
+          <div class="feature-icon">🤖</div>
+          <div class="feature-title">AI Expense Advisor</div>
+          <div class="feature-desc">Groq API (Llama 3) analyses your subscriptions, flags redundant ones, and suggests budget optimizations with context-aware recommendations.</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">📁</div>
+          <div class="feature-title">Subscription Records</div>
+          <div class="feature-desc">File handling (.txt / .json) stores all subscriptions, payment history, and renewal schedules. Persists data across sessions.</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🔔</div>
+          <div class="feature-title">Smart Renewal Alerts</div>
+          <div class="feature-desc">Automated reminders and in-app popup notifications for upcoming renewals and payment deadlines — never miss a billing date.</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">📊</div>
+          <div class="feature-title">Analytics Dashboard</div>
+          <div class="feature-desc">Interactive charts showing monthly/yearly spending, category breakdowns, and spending trends using Java2D charts.</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">💡</div>
+          <div class="feature-title">Waste Detector</div>
+          <div class="feature-desc">AI-powered detection of unused or overlapping subscriptions. Highlights unnecessary spend and calculates potential savings.</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🔐</div>
+          <div class="feature-title">User Auth</div>
+          <div class="feature-desc">Secure login/signup with password hashing (SHA-256), per-user subscription data isolation, and session management.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Architecture overview</div>
+      <div class="card" style="font-size: 13px; line-height: 1.8; color: var(--color-text-secondary);">
+        <strong style="color: var(--color-text-primary); font-weight: 500;">Frontend:</strong> Java Swing (GUI) — tabbed dashboard with charts, tables, and alert panels<br>
+        <strong style="color: var(--color-text-primary); font-weight: 500;">Backend logic:</strong> Java classes (OOP) — services, models, controllers, strategy patterns<br>
+        <strong style="color: var(--color-text-primary); font-weight: 500;">Database:</strong> SQLite via JDBC — users, subscriptions, payment_history, alerts<br>
+        <strong style="color: var(--color-text-primary); font-weight: 500;">File handling:</strong> BufferedReader/Writer for subscription exports and AI knowledge base<br>
+        <strong style="color: var(--color-text-primary); font-weight: 500;">AI API:</strong> Groq API (free, fast) → Llama 3.1 for expense analysis over HTTPS + JSON parsing
+      </div>
+    </div>
+  </div>
+
+  <!-- WEEKS -->
+  <div id="panel-weeks" class="panel">
+    <div class="section">
+      <div class="section-title">4-week implementation timeline — click each week to expand</div>
+
+      <div class="week-card" onclick="toggleWeek(this)">
+        <div class="week-header">
+          <div class="week-num" style="background:#EEEDFE;color:#3C3489;">1</div>
+          <div style="flex:1;">
+            <div style="font-size:14px;font-weight:500;color:var(--color-text-primary);">Week 1 — Foundation & Core Models</div>
+            <div style="font-size:12px;color:var(--color-text-secondary);">Project structure, OOP models, login system, file handling</div>
+          </div>
+          <span class="badge badge-purple">Days 1–7</span>
+        </div>
+        <div class="week-body">
+          <ul>
+            <li><strong>Day 1–2:</strong> Set up IntelliJ/VS Code project. Create package structure: <code>models/</code>, <code>services/</code>, <code>ui/</code>, <code>utils/</code>, <code>database/</code></li>
+            <li><strong>Day 3:</strong> Create Java classes — <code>User.java</code>, <code>Subscription.java</code>, <code>PaymentRecord.java</code> (with constructors, getters/setters, toString)</li>
+            <li><strong>Day 4:</strong> SQLite + JDBC setup. <code>DatabaseManager.java</code> with singleton pattern. Create tables: users, subscriptions, payment_history, alerts</li>
+            <li><strong>Day 5:</strong> File handling — <code>FileHandler.java</code> using BufferedReader/Writer. Export/import subscriptions as .txt or .csv</li>
+            <li><strong>Day 6–7:</strong> Login + signup UI in Java Swing. Password hashing with SHA-256. Test auth flow end-to-end</li>
+          </ul>
+          <div style="margin-top:8px;padding:8px;background:var(--color-background-secondary);border-radius:6px;font-size:12px;color:var(--color-text-secondary);">
+            ✅ Deliverable: Working login screen, user stored in DB, add/view subscription, file save/load working
+          </div>
+        </div>
+      </div>
+
+      <div class="week-card" onclick="toggleWeek(this)">
+        <div class="week-header">
+          <div class="week-num" style="background:#E1F5EE;color:#085041;">2</div>
+          <div style="flex:1;">
+            <div style="font-size:14px;font-weight:500;color:var(--color-text-primary);">Week 2 — AI Advisor + Expense Analysis</div>
+            <div style="font-size:12px;color:var(--color-text-secondary);">Groq API integration, subscription insight engine, waste detection</div>
+          </div>
+          <span class="badge badge-teal">Days 8–14</span>
+        </div>
+        <div class="week-body">
+          <ul>
+            <li><strong>Day 8:</strong> Get Groq API key (free at console.groq.com). Test with Postman/curl. Review API docs</li>
+            <li><strong>Day 9:</strong> <code>GroqService.java</code> — uses Java's <code>HttpClient</code> to POST subscription data to Groq, parses JSON response with <code>org.json</code></li>
+            <li><strong>Day 10:</strong> Build subscription knowledge base — <code>subscription_tips.txt</code> with 20–30 category-wise saving tips. <code>InsightService.java</code> injects relevant context into AI prompts</li>
+            <li><strong>Day 11:</strong> <code>WasteDetector.java</code> — AI + rule-based logic to detect overlapping categories (e.g. Netflix + Prime + Disney+) and flag underused subscriptions</li>
+            <li><strong>Day 12–13:</strong> AI Advisor UI in Swing — chat-style panel where user asks questions ("Am I overspending on streaming?"). Async threading so UI doesn't freeze</li>
+            <li><strong>Day 14:</strong> Budget optimization suggestions — AI recommends which subscriptions to cancel based on usage + cost data</li>
+          </ul>
+          <div style="margin-top:8px;padding:8px;background:var(--color-background-secondary);border-radius:6px;font-size:12px;color:var(--color-text-secondary);">
+            ✅ Deliverable: Working AI advisor with smart expense analysis, waste detection, actionable saving tips
+          </div>
+        </div>
+      </div>
+
+      <div class="week-card" onclick="toggleWeek(this)">
+        <div class="week-header">
+          <div class="week-num" style="background:#FAECE7;color:#712B13;">3</div>
+          <div style="flex:1;">
+            <div style="font-size:14px;font-weight:500;color:var(--color-text-primary);">Week 3 — Alerts + Analytics Dashboard + Charts</div>
+            <div style="font-size:12px;color:var(--color-text-secondary);">Renewal alerts, spending charts, category breakdown, budget tools</div>
+          </div>
+          <span class="badge badge-coral">Days 15–21</span>
+        </div>
+        <div class="week-body">
+          <ul>
+            <li><strong>Day 15:</strong> <code>RenewalAlertManager.java</code> — scans upcoming renewal dates, triggers popup notifications 3/7 days before billing. Uses <code>java.util.Timer</code></li>
+            <li><strong>Day 16:</strong> Payment history UI — table view of past payments per subscription, total spent per service, running annual totals</li>
+            <li><strong>Day 17:</strong> <code>SpendingAnalyzer.java</code> — calculates monthly/yearly totals, groups by category (streaming, productivity, gaming, etc.), detects spending spikes</li>
+            <li><strong>Day 18:</strong> Monthly expense bar chart — draw bar chart using Java2D Graphics in a JPanel. Show last 6 months spend trend</li>
+            <li><strong>Day 19:</strong> Category pie chart — spending breakdown by category using Java2D Graphics. Color-coded slices with legend</li>
+            <li><strong>Day 20–21:</strong> Budget goal feature — user sets monthly budget limit. Progress bar + warning when approaching limit. Connect all panels to main dashboard</li>
+          </ul>
+          <div style="margin-top:8px;padding:8px;background:var(--color-background-secondary);border-radius:6px;font-size:12px;color:var(--color-text-secondary);">
+            ✅ Deliverable: Renewal alerts, monthly + category charts, budget tracker, payment history table
+          </div>
+        </div>
+      </div>
+
+      <div class="week-card" onclick="toggleWeek(this)">
+        <div class="week-header">
+          <div class="week-num" style="background:#E6F1FB;color:#0C447C;">4</div>
+          <div style="flex:1;">
+            <div style="font-size:14px;font-weight:500;color:var(--color-text-primary);">Week 4 — Polish, Testing & Presentation</div>
+            <div style="font-size:12px;color:var(--color-text-secondary);">UI polish, bug fixes, documentation, demo prep</div>
+          </div>
+          <span class="badge badge-blue">Days 22–30</span>
+        </div>
+        <div class="week-body">
+          <ul>
+            <li><strong>Day 22–23:</strong> Integrate all modules into final tabbed dashboard: Home, Subscriptions, Analytics, AI Advisor, Alerts, Profile tabs</li>
+            <li><strong>Day 24:</strong> Apply consistent FlatLaf or Nimbus look-and-feel. Use modern color palette (indigo, teal). Add app logo/icon</li>
+            <li><strong>Day 25:</strong> Error handling — try-catch everywhere (API failures, file not found, DB errors). Show friendly error messages in UI</li>
+            <li><strong>Day 26:</strong> Write Javadoc comments on all classes. Create UML class diagram (draw.io) showing inheritance/polymorphism hierarchy</li>
+            <li><strong>Day 27:</strong> Export JAR file. Test on a clean machine. Write README.md with setup instructions</li>
+            <li><strong>Day 28–29:</strong> Prepare 5-minute demo: start with Alerts panel (wow factor), then AI Advisor, then charts, then waste detector</li>
+            <li><strong>Day 30:</strong> Final push to GitHub with proper commit history. Submit report</li>
+          </ul>
+          <div style="margin-top:8px;padding:8px;background:var(--color-background-secondary);border-radius:6px;font-size:12px;color:var(--color-text-secondary);">
+            ✅ Deliverable: Polished app, JAR export, UML diagram, GitHub repo, demo script ready
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TECH STACK -->
+  <div id="panel-tech" class="panel">
+    <div class="section">
+      <div class="section-title">Full technology stack</div>
+      <div class="tech-grid">
+        <div class="tech-item"><div class="tech-label">Language</div><div class="tech-value">Java 17+</div></div>
+        <div class="tech-item"><div class="tech-label">UI Framework</div><div class="tech-value">Java Swing</div></div>
+        <div class="tech-item"><div class="tech-label">UI Theme</div><div class="tech-value">FlatLaf (free)</div></div>
+        <div class="tech-item"><div class="tech-label">AI API</div><div class="tech-value">Groq API (free tier)</div></div>
+        <div class="tech-item"><div class="tech-label">LLM Model</div><div class="tech-value">Llama 3.1 8B</div></div>
+        <div class="tech-item"><div class="tech-label">Database</div><div class="tech-value">SQLite + JDBC</div></div>
+        <div class="tech-item"><div class="tech-label">JSON Library</div><div class="tech-value">org.json (jar)</div></div>
+        <div class="tech-item"><div class="tech-label">HTTP Client</div><div class="tech-value">Java HttpClient</div></div>
+        <div class="tech-item"><div class="tech-label">File Storage</div><div class="tech-value">BufferedReader/Writer</div></div>
+        <div class="tech-item"><div class="tech-label">Charts</div><div class="tech-value">Java2D Graphics</div></div>
+        <div class="tech-item"><div class="tech-label">IDE</div><div class="tech-value">IntelliJ IDEA</div></div>
+        <div class="tech-item"><div class="tech-label">Build Tool</div><div class="tech-value">Maven or Gradle</div></div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Why Groq API (recommended over Gemini for beginners)</div>
+      <div class="card" style="font-size: 13px; color: var(--color-text-secondary); line-height: 1.8;">
+        <span class="badge badge-teal" style="margin-bottom:8px;display:inline-block;">Groq</span> — Completely free, very fast, simple REST API, Llama 3.1 model is excellent for financial analysis and recommendations. Just send a JSON POST and get text back. Best for beginners.<br><br>
+        <span class="badge badge-blue" style="margin-bottom:8px;display:inline-block;">Gemini</span> — Also free (1M tokens/month), good alternative. Slightly more complex setup with Google credentials. Use if Groq is unavailable in your region.
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Recommended project folder structure</div>
+      <div class="api-box">
+        SubTrack/<br>
+        ├── src/main/java/<br>
+        │&nbsp;&nbsp;&nbsp;├── <span class="highlight">models/</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;User.java, Subscription.java, PaymentRecord.java, Alert.java<br>
+        │&nbsp;&nbsp;&nbsp;├── <span class="highlight">services/</span>&nbsp;&nbsp;&nbsp;&nbsp;GroqService.java, InsightService.java, WasteDetector.java<br>
+        │&nbsp;&nbsp;&nbsp;├── <span class="highlight">database/</span>&nbsp;&nbsp;&nbsp;&nbsp;DatabaseManager.java, UserDAO.java, SubscriptionDAO.java<br>
+        │&nbsp;&nbsp;&nbsp;├── <span class="highlight">ui/</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MainWindow.java, DashboardPanel.java, AnalyticsPanel.java<br>
+        │&nbsp;&nbsp;&nbsp;├── <span class="highlight">utils/</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FileHandler.java, PasswordUtil.java, DateUtil.java, AlertManager.java<br>
+        │&nbsp;&nbsp;&nbsp;└── <span class="highlight">charts/</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BarChartPanel.java, PieChartPanel.java, SpendingGraph.java<br>
+        ├── resources/<br>
+        │&nbsp;&nbsp;&nbsp;├── subscription_tips.txt&nbsp;&nbsp;&nbsp;<span class="highlight2">← AI knowledge base</span><br>
+        │&nbsp;&nbsp;&nbsp;└── category_rules.txt<br>
+        └── data/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="highlight2">← user subscription exports (auto-created)</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- OOP CONCEPTS -->
+  <div id="panel-oop" class="panel">
+    <div class="section">
+      <div class="section-title">OOP concepts demonstrated — each one mapped to your project</div>
+      <div class="oop-grid">
+        <div class="oop-item">
+          <div class="oop-dot" style="background:#534AB7;"></div>
+          <div>
+            <div class="oop-text">Inheritance</div>
+            <div class="oop-sub"><code>Subscription</code> → <code>StreamingSubscription</code>, <code>SoftwareSubscription</code>, <code>GamingSubscription</code> subclasses</div>
+          </div>
+        </div>
+        <div class="oop-item">
+          <div class="oop-dot" style="background:#1D9E75;"></div>
+          <div>
+            <div class="oop-text">Polymorphism</div>
+            <div class="oop-sub"><code>Alert</code> abstract class → <code>RenewalAlert</code>, <code>BudgetAlert</code>, <code>WasteAlert</code> override <code>trigger()</code></div>
+          </div>
+        </div>
+        <div class="oop-item">
+          <div class="oop-dot" style="background:#D85A30;"></div>
+          <div>
+            <div class="oop-text">Encapsulation</div>
+            <div class="oop-sub">Private fields + public getters/setters in all model classes (price, renewalDate, status)</div>
+          </div>
+        </div>
+        <div class="oop-item">
+          <div class="oop-dot" style="background:#378ADD;"></div>
+          <div>
+            <div class="oop-text">Abstraction</div>
+            <div class="oop-sub"><code>AIService</code> interface → implemented by <code>GroqService</code> and <code>GeminiService</code> (swap APIs easily)</div>
+          </div>
+        </div>
+        <div class="oop-item">
+          <div class="oop-dot" style="background:#639922;"></div>
+          <div>
+            <div class="oop-text">Singleton</div>
+            <div class="oop-sub"><code>DatabaseManager</code> — only one DB connection instance ever created</div>
+          </div>
+        </div>
+        <div class="oop-item">
+          <div class="oop-dot" style="background:#BA7517;"></div>
+          <div>
+            <div class="oop-text">Collections</div>
+            <div class="oop-sub">ArrayList for subscription list, HashMap for category totals, TreeMap for sorted renewal schedule</div>
+          </div>
+        </div>
+        <div class="oop-item">
+          <div class="oop-dot" style="background:#A32D2D;"></div>
+          <div>
+            <div class="oop-text">Exception Handling</div>
+            <div class="oop-sub">Custom <code>APIException</code>, <code>InvalidSubscriptionException</code> classes + try-catch-finally blocks</div>
+          </div>
+        </div>
+        <div class="oop-item">
+          <div class="oop-dot" style="background:#993356;"></div>
+          <div>
+            <div class="oop-text">File I/O</div>
+            <div class="oop-sub">BufferedReader/Writer to export subscription records; FileInputStream to load AI tips from knowledge base</div>
+          </div>
+        </div>
+        <div class="oop-item">
+          <div class="oop-dot" style="background:#5F5E5A;"></div>
+          <div>
+            <div class="oop-text">Interfaces</div>
+            <div class="oop-sub"><code>Exportable</code> interface → all data objects implement <code>toCSV()</code> and <code>toJSON()</code></div>
+          </div>
+        </div>
+        <div class="oop-item">
+          <div class="oop-dot" style="background:#0F6E56;"></div>
+          <div>
+            <div class="oop-text">Multithreading</div>
+            <div class="oop-sub"><code>SwingWorker</code> for Groq API calls + <code>Timer</code> for background renewal checks so UI doesn't freeze</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- API SETUP -->
+  <div id="panel-api" class="panel">
+    <div class="section">
+      <div class="section-title">Step 1 — Get your free Groq API key</div>
+      <div class="card" style="font-size:13px;color:var(--color-text-secondary);line-height:1.8;">
+        1. Go to <strong style="color:var(--color-text-primary);">console.groq.com</strong> → Sign up free<br>
+        2. Go to API Keys → Create new key<br>
+        3. Copy and save it in your project as a config constant (never hardcode in public repos)<br>
+        4. Free tier: 30 req/min, 6000 req/day — more than enough for a lab project
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-title">Step 2 — Java code to call Groq API for subscription analysis</div>
+      <div class="api-box">
+        <span class="highlight2">// Add to pom.xml: org.json dependency</span><br>
+        <span class="highlight">public class</span> GroqService {<br>
+        &nbsp;&nbsp;<span class="highlight">private static final</span> String API_KEY = "gsk_xxx";<br>
+        &nbsp;&nbsp;<span class="highlight">private static final</span> String URL = "https://api.groq.com/openai/v1/chat/completions";<br><br>
+        &nbsp;&nbsp;<span class="highlight">public</span> String analyzeSubscriptions(String subscriptionData) {<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;String prompt = "You are a financial advisor. Analyze these subscriptions:\n" + subscriptionData + "\nIdentify waste, overlaps, and suggest optimizations.";<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;JSONObject body = new JSONObject()<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.put("model", "llama-3.1-8b-instant")<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.put("messages", new JSONArray().put(<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;new JSONObject().put("role","user").put("content", prompt)<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;));<br><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;HttpRequest req = HttpRequest.newBuilder()<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.uri(URI.create(URL))<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.header("Authorization", "Bearer " + API_KEY)<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.header("Content-Type", "application/json")<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.POST(BodyPublishers.ofString(body.toString()))<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.build();<br><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;HttpResponse&lt;String&gt; res = client.send(req, BodyHandlers.ofString());<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span class="highlight">return new</span> JSONObject(res.body())<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.getJSONArray("choices").getJSONObject(0)<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.getJSONObject("message").getString("content");<br>
+        &nbsp;&nbsp;}<br>
+        }
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-title">Step 3 — AI knowledge base example (subscription_tips.txt)</div>
+      <div class="api-box">
+        CATEGORY: streaming<br>
+        TIP: Most households only need 1–2 streaming services. Netflix + Prime + Disney+ together cost ~$40/month. Pick 1 primary and rotate others quarterly.<br><br>
+        CATEGORY: software<br>
+        TIP: Check if your university or employer provides free licenses for Adobe, Microsoft 365, or JetBrains before paying retail.<br><br>
+        CATEGORY: gaming<br>
+        TIP: Xbox Game Pass and PlayStation Plus overlap significantly. Keeping both is redundant for most users.<br><br>
+        <span class="highlight2">// InsightService reads this file, matches subscription categories,</span><br>
+        <span class="highlight2">// and prepends relevant tips as context before calling Groq</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- CV POINTS -->
+  <div id="panel-cv" class="panel">
+    <div class="section">
+      <div class="section-title">How to write this on your CV / LinkedIn</div>
+      <div class="card" style="margin-bottom:12px;">
+        <div style="font-size:14px;font-weight:500;color:var(--color-text-primary);margin-bottom:8px;">Project entry for your resume</div>
+        <div style="font-size:13px;color:var(--color-text-secondary);line-height:1.8;font-style:italic;">
+          "SubTrack — AI Recurring Subscription Tracker &nbsp;·&nbsp; Java &nbsp;·&nbsp; 2025<br>
+          Built a full-featured subscription management desktop application in Java using OOP principles. Integrated Groq's Llama 3.1 LLM via REST API for AI-powered expense analysis and waste detection. Implemented SQLite database for subscription records, file-based payment history management, interactive analytics charts (Java2D), renewal alert system, and budget optimization engine. Demonstrates: Inheritance, Polymorphism, File I/O, Multithreading, API integration, Design Patterns."
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:6px;">
+        <div class="cv-badge"><div class="cv-dot"></div>Shows AI/LLM integration for financial analysis (very rare for 2nd semester)</div>
+        <div class="cv-badge"><div class="cv-dot"></div>Demonstrates full-stack Java — UI, backend, DB, API, file handling, charts</div>
+        <div class="cv-badge"><div class="cv-dot"></div>Real-world problem (personal finance) = strong project motivation story for interviews</div>
+        <div class="cv-badge"><div class="cv-dot"></div>FinTech + AI keywords are highly valued by employers in 2025</div>
+        <div class="cv-badge"><div class="cv-dot"></div>GitHub with regular commits proves real development process</div>
+        <div class="cv-badge"><div class="cv-dot"></div>UML diagrams show software engineering maturity beyond basic coding</div>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-title">Quick tips for maximum marks in lab</div>
+      <div class="card" style="font-size:13px;color:var(--color-text-secondary);line-height:1.9;">
+        ⭐ Start the demo with the <strong style="color:var(--color-text-primary);">Analytics Dashboard + Charts</strong> — instant visual wow factor<br>
+        ⭐ Show the <strong style="color:var(--color-text-primary);">class hierarchy diagram (UML)</strong> and name each OOP concept verbally<br>
+        ⭐ Show live AI analysis — paste your own subscriptions and let teacher see the insight<br>
+        ⭐ Show the <strong style="color:var(--color-text-primary);">subscription file being written/read</strong> in real time (open Notepad alongside)<br>
+        ⭐ Keep all code in <strong style="color:var(--color-text-primary);">separate, well-named .java files</strong> — no spaghetti code<br>
+        ⭐ Add your name + registration number in the app's About screen
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  setTimeout(() => { document.getElementById('pbar').style.width = '0%'; }, 100);
+
+  function showTab(name) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    event.target.classList.add('active');
+    document.getElementById('panel-' + name).classList.add('active');
+  }
+
+  function toggleWeek(card) {
+    const body = card.querySelector('.week-body');
+    body.classList.toggle('open');
+  }
+</script>

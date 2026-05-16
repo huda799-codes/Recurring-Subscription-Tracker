@@ -1,0 +1,178 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-mono,monospace);font-size:12px;color:var(--color-text-primary)}
+.root{padding:16px 12px}
+.section-label{font-size:10px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--color-text-tertiary);margin:18px 0 6px 0;padding-left:4px;border-left:2px solid var(--color-border-secondary)}
+.tree{line-height:1.75}
+.row{display:flex;align-items:center;gap:5px;padding:1px 0;cursor:default;border-radius:4px;transition:background .12s}
+.row:hover{background:var(--color-background-secondary)}
+.indent{display:inline-block;width:18px;flex-shrink:0}
+.icon{width:14px;height:14px;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.name{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.badge{font-size:9px;padding:1px 5px;border-radius:10px;white-space:nowrap;font-weight:500;flex-shrink:0}
+/* badge colors */
+.b-green{background:#C0DD97;color:#27500A}
+.b-blue{background:#B5D4F4;color:#0C447C}
+.b-amber{background:#FAC775;color:#633806}
+.b-coral{background:#F5C4B3;color:#712B13}
+.b-purple{background:#CECBF6;color:#3C3489}
+.b-teal{background:#9FE1CB;color:#085041}
+.b-gray{background:#D3D1C7;color:#444441}
+@media(prefers-color-scheme:dark){
+.b-green{background:#27500A;color:#C0DD97}
+.b-blue{background:#0C447C;color:#B5D4F4}
+.b-amber{background:#633806;color:#FAC775}
+.b-coral{background:#712B13;color:#F5C4B3}
+.b-purple{background:#3C3489;color:#CECBF6}
+.b-teal{background:#085041;color:#9FE1CB}
+.b-gray{background:#444441;color:#D3D1C7}
+}
+.folder-name{color:var(--color-text-info,#185FA5);font-weight:500}
+.file-name{color:var(--color-text-primary)}
+.comment{color:var(--color-text-tertiary);font-size:10px;margin-left:4px}
+.divider{border:none;border-top:1px solid var(--color-border-tertiary);margin:10px 0}
+.header{display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--color-background-secondary);border-radius:8px;margin-bottom:14px}
+.header-title{font-size:14px;font-weight:500;color:var(--color-text-primary)}
+.header-sub{font-size:11px;color:var(--color-text-secondary);margin-top:2px}
+.dot{width:10px;height:10px;border-radius:50%;display:inline-block}
+</style>
+
+<div class="root">
+<div class="header">
+  <span style="font-size:22px;">💳</span>
+  <div>
+    <div class="header-title">SubTrack — Proper MVC Structure</div>
+    <div class="header-sub">Backend (Java Spring Boot) &nbsp;+&nbsp; Frontend (HTML/CSS/JS) &nbsp;+&nbsp; REST API Endpoints</div>
+  </div>
+</div>
+
+<div class="tree">
+
+<!-- ROOT -->
+<div class="section-label">Project Root</div>
+<div class="row"><span class="indent"></span><i class="ti ti-folder-filled icon" style="color:#EF9F27" aria-hidden="true"></i><span class="name folder-name">subtrack/</span></div>
+
+<!-- BACKEND -->
+<div class="section-label">Backend (MVC Core — Java Spring Boot)</div>
+
+<!-- Config -->
+<div class="row"><span class="indent"></span><i class="ti ti-folder icon" style="color:#EF9F27" aria-hidden="true"></i><span class="name folder-name">config/</span><span class="badge b-gray">settings</span></div>
+<div class="row"><span class="indent"></span><span class="indent"></span><i class="ti ti-file-code icon" aria-hidden="true"></i><span class="name file-name">DatabaseConfig.java</span><span class="comment">— SQLite datasource & JPA setup</span></div>
+<div class="row"><span class="indent"></span><span class="indent"></span><i class="ti ti-file-code icon" aria-hidden="true"></i><span class="name file-name">SecurityConfig.java</span><span class="comment">— Spring Security, JWT filter</span></div>
+<div class="row"><span class="indent"></span><span class="indent"></span><i class="ti ti-file-code icon" aria-hidden="true"></i><span class="name file-name">GroqConfig.java</span><span class="comment">— AI API key & endpoint constants</span></div>
+<div class="row"><span class="indent"></span><span class="indent"></span><i class="ti ti-file-code icon" aria-hidden="true"></i><span class="name file-name">AppConstants.java</span><span class="comment">— billing cycles, alert thresholds</span></div>
+
+<!-- Models -->
+<div class="row" style="margin-top:4px"><span class="indent"></span><i class="ti ti-folder icon" style="color:#EF9F27" aria-hidden="true"></i><span class="name folder-name">model/</span><span class="badge b-purple">M — Model</span></div>
+<div class="row"><span class="indent"></span><span class="indent"></span><i class="ti ti-file-code icon" aria-hidden="true"></i><span class="name file-name">User.java</span><span class="comment">— id, name, email, passwordHash, monthlyBudget</span></div>
+<div class="row"><span class="indent"></span><span class="indent"></span><i class="ti ti-file-code icon" aria-hidden="true"></i><span class="name file-name">Subscription.java</span><span class="comment">— name, category, price, cycle, renewalDate, status</span></div>
+<div class="row"><span class="indent"></span><span class="indent"></span><i class="ti ti-file-code icon" aria-hidden="true"></i><span class="name file-name">PaymentRecord.java</span><span class="comment">— subscriptionId, amount, date, status</span></div>
+<div class="row"><span class="indent"></span><span class="indent"></span><i class="ti ti-file-code icon" aria-hidden="true"></i><span class="name file-name">Alert.java</span><span class="comment">— type, message, triggerDate, isRead</span></div>
+<div class="row"><span class="indent"></span><span class="indent"></span><i class="ti ti-file-code icon" aria-hidden="true"></i><span class="name file-name">Category.java</span><span class="comment">— name (streaming, software, gaming, fitness…)</span></div>
+<div class="row"><span class="indent"></span><span class="indent"></span><i class="ti ti-file-code icon" aria-hidden="true"></i><span class="name file-name">SpendingSummary.java</span><span class="comment">— month, totalSpent, categoryBreakdown[]</span></div>
+
+<!-- Controllers -->
+<div class="row" style="margin-top:4px"><span class="indent"></span><i class="ti ti-folder icon" style="color:#EF9F27" aria-hidden="true"></i><span class="name folder-name">controller/</span><span class="badge b-blue">C — Controller</span></div>
+<div class="row"><span class="indent"></span><span class="indent"></span><i class="ti ti-file-code icon" aria-hidden="true"></i><span class="name file-name">AuthController.java</span><span class="comment">— register, login, logout, profile</span></div>
+<div class="row"><span class="indent"></span><span class="indent"></span><i class="ti ti-file-code icon" aria-hidden="true"></i><span class="name file-name">SubscriptionController.java</span><span class="comment">— CRUD, list, filter, export</span></div>
+<div class="row"><span class="indent"></span><span class="indent"></span><i class="ti ti-file-code icon" aria-hidden="true"></i><span class="name file-name">PaymentController.java</span><span class="comment">— history, upcoming, mark-paid</span></div>
+<div class="row"><span class="indent"></span><span class="indent"></span><i class="ti ti-file-code icon" aria-hidden="true"></i><span class="name file-name">AlertController.java</span><span class="comment">— list alerts, mark-read, dismiss</span></div>
+<div class="row"><span class="indent"></span><span class="indent"></span><i class="ti ti-file-code icon" aria-hidden="true"></i><span class="name file-name">AnalyticsController.java</span><span class="comment">— monthly spend, category breakdown, trends</span></div>
+<div class="row"><span class="indent"></span><span class="indent"></span><i class="ti ti-file-code icon" aria-hidden="true"></i><span class="name file-name">AIAdvisorController.java</span><span class="comment">— expense analysis, waste detection, suggestions</span></div>
+<div class="row"><span class="indent"></span><span class="indent"></span><i class="ti ti-file-code icon" aria-hidden="true"></i><span class="name file-name">BudgetController.java</span><span class="comment">— set budget, get progress, overspend check</span></div>
+
+<!-- API Routes -->
+<div class="row" style="margin-top:4px"><span class="indent"></span><i class="ti ti-folder icon" style="color:#EF9F27" aria-hidden="true"></i><span class="name folder-name">routes/</span><span class="badge b-coral">REST API endpoints</span></div>
+<div class="row"><span class="indent"></span><span class="indent"></span><i class="ti ti-folder icon" style="color:#EF9F27" aria-hidden="true"></i><span class="name folder-name">api/</span><span class="comment">— /api/v1/...</span></div>
+<div class="row"><span class="indent"></span><span class="indent"></span><span class="indent"></span><i class="ti ti-file-code icon" aria-hidden="true"></i><span class="name file-name">auth.routes</span><span class="comment">— POST /register  /login  /logout</span></div>
+<div class="row"><span class="indent"></span><span class="indent"></span><span class="indent"></span><i class="ti ti-file-code icon" aria-hidden="true"></i><span class="name file-name">subscription.routes</span><span class="comment">— GET /subscriptions  POST PUT DELETE /:id</span></div>
+<div class="row"><span class="indent"></span><span class="indent"></span><span class="indent"></span><i class="ti ti-file-code icon" aria-hidden="true"></i><span class="name file-name">payment.routes</span><span class="comment">— GET /payments  POST /record  GET /upcoming</span></div>
+<div class="row"><span class="indent"></span><span class="indent"></span><span class="indent"></span><i class="ti ti-file-code icon" aria-hidden="true"></i><span class="name file-name">alert.routes</span><span class="comment">— GET /alerts  PATCH /read  DELETE /dismiss</span></div>
+<div class="row"><span class="indent"></span><span class="indent"></span><span class="indent"></span><i class="ti ti-file-code icon" aria-hidden="true"></i><span class="name file-name">analytics.routes</span><span class="comment">— GET /spend/monthly  /spend/category  /trends</span></div>
+<div class="row"><span class="indent"></span><span class="indent"></span><span class="indent"></span><i class="ti ti-file-code icon" aria-hidden="true"></i><span class="name file-name">ai.routes</span><span class="comment">— POST /analyze  /detect-waste  /suggest</span></div>
+<div class="row"><span class="indent"></span><span class="indent"></span><span class="indent"></span><i class="ti ti-file-code icon" aria-hidden="true"></i><span class="name file-name">budget.routes</span><span class="comment">— GET /budget  PUT /budget  GET /budget/status</span></div>
+<div class="row"><span class="indent"></span><span class="indent"></span><span class="indent"></span><i class="ti ti-file-code icon" aria-hidden="true"></i><span class="name file-name">export.routes</span><span class="comment">— GET /export/csv  /export/json</span></div>
+
+<!-- Middleware -->
+<div class="row" style="margin-top:4px"><span class="indent"></span><i class="ti ti-folder icon" style="color:#EF9F27" aria-hidden="true"></i><span class="name folder-name">middleware/</span><span class="badge b-teal">guards</span></div>
+<div class="row"><span class="indent"></span><span class="indent"></span><i class="ti ti-file-code icon" aria-hidden="true"></i><span class="name file-name">JwtAuthFilter.java</span><span class="comment">— verify JWT on every request</span></div>
+<div class="row"><span class="indent"></span><span class="indent"></span><i class="ti ti-file-code icon" aria-hidden="true"></i><span class="name file-name">GlobalExceptionHandler.java</span><span class="comment">— @ControllerAdvice error handler</span></div>
+<div class="row"><span class="indent"></span><span class="indent"></span><i class="ti ti-file-code icon" aria-hidden="true"></i><span class="name file-name">RequestValidator.java</span><span class="comment">— input validation for subscription fields</span></div>
+<div class="row"><span class="indent"></span><span class="indent"></span><i class="ti ti-file-code icon" aria-hidden="true"></i><span class="name file-name">RateLimitFilter.java</span><span class="comment">— limits AI API calls per user</span></div>
+
+<!-- Services -->
+<div class="row" style="margin-top:4px"><span class="indent"></span><i class="ti ti-folder icon" style="color:#EF9F27" aria-hidden="true"></i><span class="name folder-name">service/</span><span class="badge b-green">business logic</span></div>
+<div class="row"><span class="indent"></span><span class="indent"></span><i class="ti ti-file-code icon" aria-hidden="true"></i><span class="name file-name">GroqService.java</span><span class="comment">— calls Groq LLM API, parses JSON response</span></div>
+<div class="row"><span class="indent"></span><span class="indent"></span><i class="ti ti-file-code icon" aria-hidden="true"></i><span class="name file-name">InsightService.java</span><span class="comment">— builds AI prompts with subscription context + tips</span></div>
+<div class="row"><span class="indent"></span><span class="indent"></span><i class="ti ti-file-code icon" aria-hidden="true"></i><span class="name file-name">WasteDetectorService.java</span><span class="comment">— detects overlapping & unused subscriptions</span></div>
+<div class="row"><span class="indent"></span><span class="indent"></span><i class="ti ti-file-code icon" aria-hidden="true"></i><span class="name file-name">SpendingAnalyzerService.java</span><span class="comment">— monthly totals, trend calculation, category grouping</span></div>
+<div class="row"><span class="indent"></span><span class="indent"></span><i class="ti ti-file-code icon" aria-hidden="true"></i><span class="name file-name">AlertSchedulerService.java</span><span class="comment">— @Scheduled job: fires renewal alerts 3/7 days ahead</span></div>
+<div class="row"><span class="indent"></span><span class="indent"></span><i class="ti ti-file-code icon" aria-hidden="true"></i><span class="name file-name">FileExportService.java</span><span class="comment">— exports subscription list to .csv / .json</span></div>
+<div class="row"><span class="indent"></span><span class="indent"></span><i class="ti ti-file-code icon" aria-hidden="true"></i><span class="name file-name">UserService.java</span><span class="comment">— auth logic, password hashing, JWT generation</span></div>
+
+<!-- Utils -->
+<div class="row" style="margin-top:4px"><span class="indent"></span><i class="ti ti-folder icon" style="color:#EF9F27" aria-hidden="true"></i><span class="name folder-name">util/</span><span class="badge b-gray">helpers</span></div>
+<div class="row"><span class="indent"></span><span class="indent"></span><i class="ti ti-file-code icon" aria-hidden="true"></i><span class="name file-name">ApiResponse.java</span><span class="comment">— standardized JSON response wrapper</span></div>
+<div class="row"><span class="indent"></span><span class="indent"></span><i class="ti ti-file-code icon" aria-hidden="true"></i><span class="name file-name">DateUtil.java</span><span class="comment">— renewal countdown, billing cycle helpers</span></div>
+<div class="row"><span class="indent"></span><span class="indent"></span><i class="ti ti-file-code icon" aria-hidden="true"></i><span class="name file-name">CurrencyUtil.java</span><span class="comment">— PKR / USD formatting</span></div>
+<div class="row"><span class="indent"></span><span class="indent"></span><i class="ti ti-file-code icon" aria-hidden="true"></i><span class="name file-name">JwtUtil.java</span><span class="comment">— JWT sign & verify</span></div>
+
+<!-- FRONTEND -->
+<div class="section-label">Frontend (HTML/CSS/JS — V in MVC)</div>
+
+<div class="row"><span class="indent"></span><i class="ti ti-folder icon" style="color:#EF9F27" aria-hidden="true"></i><span class="name folder-name">static/</span><span class="badge b-green">V — View</span></div>
+<div class="row"><span class="indent"></span><span class="indent"></span><i class="ti ti-folder icon" style="color:#EF9F27" aria-hidden="true"></i><span class="name folder-name">pages/</span></div>
+<div class="row"><span class="indent"></span><span class="indent"></span><span class="indent"></span><i class="ti ti-file icon" aria-hidden="true"></i><span class="name file-name">login.html</span><span class="comment">— login / register tabs</span></div>
+<div class="row"><span class="indent"></span><span class="indent"></span><span class="indent"></span><i class="ti ti-file icon" aria-hidden="true"></i><span class="name file-name">dashboard.html</span><span class="comment">— summary cards: total spend, renewals due, waste found</span></div>
+<div class="row"><span class="indent"></span><span class="indent"></span><span class="indent"></span><i class="ti ti-file icon" aria-hidden="true"></i><span class="name file-name">subscriptions.html</span><span class="comment">— table of all subscriptions + add/edit/delete</span></div>
+<div class="row"><span class="indent"></span><span class="indent"></span><span class="indent"></span><i class="ti ti-file icon" aria-hidden="true"></i><span class="name file-name">analytics.html</span><span class="comment">— monthly bar chart + category pie chart (Chart.js)</span></div>
+<div class="row"><span class="indent"></span><span class="indent"></span><span class="indent"></span><i class="ti ti-file icon" aria-hidden="true"></i><span class="name file-name">ai-advisor.html</span><span class="comment">— chat-style AI expense advisor panel</span></div>
+<div class="row"><span class="indent"></span><span class="indent"></span><span class="indent"></span><i class="ti ti-file icon" aria-hidden="true"></i><span class="name file-name">alerts.html</span><span class="comment">— renewal reminders + budget warnings list</span></div>
+<div class="row"><span class="indent"></span><span class="indent"></span><span class="indent"></span><i class="ti ti-file icon" aria-hidden="true"></i><span class="name file-name">payments.html</span><span class="comment">— payment history timeline per subscription</span></div>
+<div class="row"><span class="indent"></span><span class="indent"></span><span class="indent"></span><i class="ti ti-file icon" aria-hidden="true"></i><span class="name file-name">budget.html</span><span class="comment">— budget goal setter + monthly progress bar</span></div>
+<div class="row"><span class="indent"></span><span class="indent"></span><span class="indent"></span><i class="ti ti-file icon" aria-hidden="true"></i><span class="name file-name">profile.html</span><span class="comment">— user settings, currency preference, export</span></div>
+<div class="row"><span class="indent"></span><span class="indent"></span><i class="ti ti-folder icon" style="color:#EF9F27" aria-hidden="true"></i><span class="name folder-name">partials/</span></div>
+<div class="row"><span class="indent"></span><span class="indent"></span><span class="indent"></span><i class="ti ti-file icon" aria-hidden="true"></i><span class="name file-name">navbar.html</span></div>
+<div class="row"><span class="indent"></span><span class="indent"></span><span class="indent"></span><i class="ti ti-file icon" aria-hidden="true"></i><span class="name file-name">subscription-card.html</span></div>
+<div class="row"><span class="indent"></span><span class="indent"></span><span class="indent"></span><i class="ti ti-file icon" aria-hidden="true"></i><span class="name file-name">alert-badge.html</span></div>
+
+<!-- Static Assets -->
+<div class="section-label">Static Assets</div>
+<div class="row"><span class="indent"></span><i class="ti ti-folder icon" style="color:#EF9F27" aria-hidden="true"></i><span class="name folder-name">public/</span><span class="badge b-amber">static files</span></div>
+<div class="row"><span class="indent"></span><span class="indent"></span><i class="ti ti-folder icon" style="color:#EF9F27" aria-hidden="true"></i><span class="name folder-name">css/</span></div>
+<div class="row"><span class="indent"></span><span class="indent"></span><span class="indent"></span><i class="ti ti-file icon" aria-hidden="true"></i><span class="name file-name">main.css</span></div>
+<div class="row"><span class="indent"></span><span class="indent"></span><span class="indent"></span><i class="ti ti-file icon" aria-hidden="true"></i><span class="name file-name">dashboard.css</span></div>
+<div class="row"><span class="indent"></span><span class="indent"></span><i class="ti ti-folder icon" style="color:#EF9F27" aria-hidden="true"></i><span class="name folder-name">js/</span></div>
+<div class="row"><span class="indent"></span><span class="indent"></span><span class="indent"></span><i class="ti ti-file-code icon" aria-hidden="true"></i><span class="name file-name">subscriptions.js</span><span class="comment">— CRUD calls, table render</span></div>
+<div class="row"><span class="indent"></span><span class="indent"></span><span class="indent"></span><i class="ti ti-file-code icon" aria-hidden="true"></i><span class="name file-name">analytics.js</span><span class="comment">— Chart.js bar + pie charts</span></div>
+<div class="row"><span class="indent"></span><span class="indent"></span><span class="indent"></span><i class="ti ti-file-code icon" aria-hidden="true"></i><span class="name file-name">ai-advisor.js</span><span class="comment">— chat UI, fetch /api/analyze</span></div>
+<div class="row"><span class="indent"></span><span class="indent"></span><span class="indent"></span><i class="ti ti-file-code icon" aria-hidden="true"></i><span class="name file-name">alerts.js</span><span class="comment">— poll for new alerts, show banners</span></div>
+<div class="row"><span class="indent"></span><span class="indent"></span><span class="indent"></span><i class="ti ti-file-code icon" aria-hidden="true"></i><span class="name file-name">auth.js</span><span class="comment">— login/register, save JWT to localStorage</span></div>
+<div class="row"><span class="indent"></span><span class="indent"></span><i class="ti ti-folder icon" style="color:#EF9F27" aria-hidden="true"></i><span class="name folder-name">images/</span></div>
+<div class="row"><span class="indent"></span><span class="indent"></span><span class="indent"></span><i class="ti ti-file icon" aria-hidden="true"></i><span class="name file-name">logo.png</span></div>
+<div class="row"><span class="indent"></span><span class="indent"></span><span class="indent"></span><i class="ti ti-file icon" aria-hidden="true"></i><span class="name file-name">service-icons/</span><span class="comment">— Netflix, Spotify, Adobe logos etc.</span></div>
+
+<!-- Database -->
+<div class="section-label">Database & Data Files</div>
+<div class="row"><span class="indent"></span><i class="ti ti-folder icon" style="color:#EF9F27" aria-hidden="true"></i><span class="name folder-name">data/</span><span class="badge b-purple">SQLite + files</span></div>
+<div class="row"><span class="indent"></span><span class="indent"></span><i class="ti ti-file-code icon" aria-hidden="true"></i><span class="name file-name">subtrack.db</span><span class="comment">— auto-created SQLite database</span></div>
+<div class="row"><span class="indent"></span><span class="indent"></span><i class="ti ti-file icon" aria-hidden="true"></i><span class="name file-name">exports/</span><span class="comment">— user CSV/JSON subscription exports</span></div>
+
+<!-- Resources -->
+<div class="section-label">Resources (AI Knowledge Base)</div>
+<div class="row"><span class="indent"></span><i class="ti ti-folder icon" style="color:#EF9F27" aria-hidden="true"></i><span class="name folder-name">resources/</span><span class="badge b-teal">AI context files</span></div>
+<div class="row"><span class="indent"></span><span class="indent"></span><i class="ti ti-file icon" aria-hidden="true"></i><span class="name file-name">subscription_tips.txt</span><span class="comment">— category-wise saving tips for AI prompts</span></div>
+<div class="row"><span class="indent"></span><span class="indent"></span><i class="ti ti-file icon" aria-hidden="true"></i><span class="name file-name">category_rules.txt</span><span class="comment">— rules for waste/overlap detection logic</span></div>
+
+<!-- Root files -->
+<div class="section-label">Root Files</div>
+<div class="row"><span class="indent"></span><i class="ti ti-file-code icon" aria-hidden="true"></i><span class="name file-name">SubTrackApplication.java</span><span class="comment">— Spring Boot main entry point</span></div>
+<div class="row"><span class="indent"></span><i class="ti ti-file icon" aria-hidden="true"></i><span class="name file-name">application.properties</span><span class="comment">— GROQ_API_KEY, SQLite path, JWT secret</span></div>
+<div class="row"><span class="indent"></span><i class="ti ti-file icon" aria-hidden="true"></i><span class="name file-name">.env.example</span></div>
+<div class="row"><span class="indent"></span><i class="ti ti-file-code icon" aria-hidden="true"></i><span class="name file-name">pom.xml</span><span class="comment">— Spring Boot, SQLite, org.json, Spring Security</span></div>
+<div class="row"><span class="indent"></span><i class="ti ti-file icon" aria-hidden="true"></i><span class="name file-name">.gitignore</span></div>
+<div class="row"><span class="indent"></span><i class="ti ti-file icon" aria-hidden="true"></i><span class="name file-name">README.md</span></div>
+
+</div>
+</div>

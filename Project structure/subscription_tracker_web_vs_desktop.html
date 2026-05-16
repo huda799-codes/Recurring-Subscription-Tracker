@@ -1,0 +1,106 @@
+
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 1.5rem; }
+  .card { border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 1.25rem; background: var(--color-background-primary); }
+  .card.recommended { border: 2px solid #1D9E75; }
+  .card-title { font-size: 15px; font-weight: 500; color: var(--color-text-primary); margin-bottom: 4px; display: flex; align-items: center; gap: 8px; }
+  .badge { display: inline-block; font-size: 11px; font-weight: 500; padding: 2px 8px; border-radius: 20px; }
+  .badge-green { background: #EAF3DE; color: #27500A; }
+  .badge-gray { background: #F1EFE8; color: #444441; }
+  .badge-blue { background: #E6F1FB; color: #0C447C; }
+  .badge-amber { background: #FAEEDA; color: #633806; }
+  @media (prefers-color-scheme: dark) {
+    .badge-green { background: #173404; color: #C0DD97; }
+    .badge-gray { background: #2C2C2A; color: #D3D1C7; }
+    .badge-blue { background: #042C53; color: #B5D4F4; }
+    .badge-amber { background: #412402; color: #FAC775; }
+  }
+  .sub { font-size: 12px; color: var(--color-text-tertiary); margin-bottom: 12px; }
+  .row { display: flex; align-items: flex-start; gap: 8px; margin-bottom: 8px; font-size: 13px; color: var(--color-text-secondary); line-height: 1.5; }
+  .dot-green { width: 7px; height: 7px; border-radius: 50%; background: #1D9E75; flex-shrink: 0; margin-top: 5px; }
+  .dot-red { width: 7px; height: 7px; border-radius: 50%; background: #E24B4A; flex-shrink: 0; margin-top: 5px; }
+  .section-title { font-size: 11px; font-weight: 500; color: var(--color-text-tertiary); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 10px; padding-bottom: 6px; border-bottom: 0.5px solid var(--color-border-tertiary); }
+  .stack-row { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 1rem; }
+  .stack-item { background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 6px 10px; font-size: 12px; }
+  .stack-label { color: var(--color-text-tertiary); font-size: 10px; margin-bottom: 2px; }
+  .stack-val { color: var(--color-text-primary); font-weight: 500; }
+  .highlight { color: #1D9E75; font-weight: 500; }
+  .api-box { border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-md); padding: 12px; font-family: var(--font-mono); font-size: 12px; color: var(--color-text-secondary); background: var(--color-background-secondary); line-height: 1.8; }
+  .rec-banner { background: #E1F5EE; border-radius: var(--border-radius-md); padding: 10px 14px; font-size: 13px; color: #085041; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 8px; }
+  @media (prefers-color-scheme: dark) { .rec-banner { background: #04342C; color: #9FE1CB; } }
+</style>
+
+<div style="padding: 1rem 0;">
+
+  <div class="rec-banner">
+    <span style="font-size:16px;">✅</span>
+    <span><strong>Recommended for you:</strong> Go web-based — interactive dashboards and charts look far better in a browser, easier to share for demo, same Java OOP backend, and you can show it from any phone or laptop.</span>
+  </div>
+
+  <div class="grid">
+    <!-- Web -->
+    <div class="card recommended">
+      <div class="card-title">🌐 Web App <span class="badge badge-green">Recommended</span></div>
+      <div class="sub">HTML/JS frontend + Java Spring Boot backend</div>
+      <div class="row"><div class="dot-green"></div>Runs in any browser — no install needed</div>
+      <div class="row"><div class="dot-green"></div>Charts (Chart.js) look far more professional than Java2D</div>
+      <div class="row"><div class="dot-green"></div>Easy to share a link for demo or upload to portfolio</div>
+      <div class="row"><div class="dot-green"></div>Real-time alert polling and live dashboard updates</div>
+      <div class="row"><div class="dot-green"></div>Same Java OOP backend — all concepts preserved</div>
+      <div class="row"><div class="dot-green"></div>Can deploy free on Render or Railway</div>
+      <div class="row"><div class="dot-red"></div>Needs to learn a little HTML/CSS/JS (manageable)</div>
+    </div>
+    <!-- Desktop -->
+    <div class="card">
+      <div class="card-title">🖥️ Desktop App <span class="badge badge-gray">Java Swing</span></div>
+      <div class="sub">Original simpler option</div>
+      <div class="row"><div class="dot-green"></div>Pure Java — fits OOP lab perfectly</div>
+      <div class="row"><div class="dot-green"></div>No browser/server setup needed</div>
+      <div class="row"><div class="dot-green"></div>File handling is simpler locally</div>
+      <div class="row"><div class="dot-red"></div>Java Swing looks outdated — bad for a finance tracker</div>
+      <div class="row"><div class="dot-red"></div>Charts drawn with Java2D are tedious and ugly</div>
+      <div class="row"><div class="dot-red"></div>Hard to share — need to install JRE on every PC</div>
+      <div class="row"><div class="dot-red"></div>Cannot demo easily on mobile or show in portfolio</div>
+    </div>
+  </div>
+
+  <!-- Recommended Stack -->
+  <div class="section-title">Recommended web stack — still 100% Java for OOP requirement</div>
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 8px; margin-bottom: 1.5rem;">
+    <div class="stack-item"><div class="stack-label">Frontend</div><div class="stack-val">HTML + CSS + JS</div></div>
+    <div class="stack-item"><div class="stack-label">Charts</div><div class="stack-val">Chart.js</div></div>
+    <div class="stack-item"><div class="stack-label">Backend</div><div class="stack-val">Java + Spring Boot</div></div>
+    <div class="stack-item"><div class="stack-label">API calls</div><div class="stack-val">REST (JSON)</div></div>
+    <div class="stack-item"><div class="stack-label">Database</div><div class="stack-val">SQLite / H2</div></div>
+    <div class="stack-item"><div class="stack-label">AI</div><div class="stack-val">Groq API</div></div>
+    <div class="stack-item"><div class="stack-label">Deploy</div><div class="stack-val">Render (free)</div></div>
+  </div>
+
+  <!-- OR even simpler -->
+  <div class="section-title">Even simpler option — if Spring Boot feels complex</div>
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 8px; margin-bottom: 1.5rem;">
+    <div class="stack-item"><div class="stack-label">Frontend</div><div class="stack-val">HTML + CSS + JS</div></div>
+    <div class="stack-item"><div class="stack-label">Backend</div><div class="stack-val">Python Flask</div></div>
+    <div class="stack-item"><div class="stack-label">OOP Lab</div><div class="stack-val">Java for models only</div></div>
+    <div class="stack-item"><div class="stack-label">AI</div><div class="stack-val">Groq API</div></div>
+    <div class="stack-item"><div class="stack-label">Database</div><div class="stack-val">SQLite</div></div>
+    <div class="stack-item"><div class="stack-label">Deploy</div><div class="stack-val">Render (free)</div></div>
+  </div>
+
+  <!-- How it works -->
+  <div class="section-title">How the web version works — subscription tracker data flow</div>
+  <div class="api-box">
+    User (Browser) → adds subscription or asks AI advisor<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;↓ &nbsp;fetch POST /api/subscriptions or /api/ai/analyze<br>
+    Java Spring Boot Backend → receives request<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;↓ &nbsp;SubscriptionController saves to SQLite via JPA<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;↓ &nbsp;InsightService loads context from subscription_tips.txt<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;↓ &nbsp;GroqService calls Groq API with subscription data + context<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;↓ &nbsp;AlertSchedulerService checks renewal dates in background<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;↓ &nbsp;FileExportService writes subscription CSV to data/exports/<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;↓ &nbsp;returns JSON { "insight": "...", "wastFound": [...] }<br>
+    Browser → displays AI insight + updates charts ✅
+  </div>
+
+</div>

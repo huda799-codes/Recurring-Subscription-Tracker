@@ -1,38 +1,26 @@
 package com.model;
-
+import com.model.Subscription;
 public class Subscription {
 
-    private int id;
     private String serviceName;
     private double amount;
     private String category;
     private String billingCycle;
     private String nextBillingDate;
 
-    public Subscription() {}
-
     public Subscription(
-            int id,
             String serviceName,
             double amount,
             String category,
             String billingCycle,
             String nextBillingDate
     ) {
-        this.id = id;
+
         this.serviceName = serviceName;
         this.amount = amount;
         this.category = category;
         this.billingCycle = billingCycle;
         this.nextBillingDate = nextBillingDate;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getServiceName() {

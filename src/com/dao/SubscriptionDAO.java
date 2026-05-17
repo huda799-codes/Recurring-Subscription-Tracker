@@ -45,4 +45,67 @@ public class SubscriptionDAO {
             e.printStackTrace();
         }
     }
+    public void updateSubscription(
+            int id,
+            String serviceName,
+            double amount,
+            String category,
+            String billingCycle,
+            String nextBillingDate
+    ) {
+
+        try {
+
+            Connection connection =
+                    DBConnection.getConnection();
+
+            String query =
+                    "UPDATE subscriptions " +
+                            "SET service_name=?, amount=?, category=?, " +
+                            "billing_cycle=?, next_billing_date=? " +
+                            "WHERE id=?";
+
+            PreparedStatement ps =
+                    connection.prepareStatement(query);
+
+            ps.setString(1, serviceName);
+            ps.setDouble(2, amount);
+            ps.setString(3, category);
+            ps.setString(4, billingCycle);
+            ps.setString(5, nextBillingDate);
+            ps.setInt(6, id);
+
+            ps.executeUpdate();
+
+            System.out.println("Subscription Updated");
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+        }
+    }
+    public void deleteSubscription(int id) {
+
+        try {
+
+            Connection connection =
+                    DBConnection.getConnection();
+
+            String query =
+                    "DELETE FROM subscriptions WHERE id=?";
+
+            PreparedStatement ps =
+                    connection.prepareStatement(query);
+
+            ps.setInt(1, id);
+
+            ps.executeUpdate();
+
+            System.out.println("Subscription Deleted");
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+        }
+    }
 }

@@ -1,32 +1,27 @@
 package com.util;
 
-import com.model.Subscription;
-
 import java.io.FileWriter;
 import java.io.IOException;
 
 public class FileHandler {
 
-    public static void saveToFile(Subscription s) {
+    public void writeToFile(String data) {
 
         try {
 
             FileWriter writer =
-                    new FileWriter("backups/subscriptions.txt", true);
+                    new FileWriter("reports.txt", true);
 
-            writer.write(
-                    s.getServiceName() + "," +
-                            s.getAmount() + "," +
-                            s.getCategory() + "," +
-                            s.getBillingCycle() + "," +
-                            s.getNextBillingDate()
-                            + "\n"
-            );
+            writer.write(data + "\n");
 
             writer.close();
 
-        } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("Data Written To File Successfully");
+
+        }
+        catch (IOException e) {
+
+            System.out.println("File Error: " + e.getMessage());
         }
     }
 }

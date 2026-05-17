@@ -10,5 +10,6 @@
     <orderEntry type="library" name="apache-tomcat-10.1.55-windows-x64" level="project" />
     <orderEntry type="library" name="servlet-api" level="project" />
     <orderEntry type="library" exported="" name="servlet-api1" level="project" />
+    <orderEntry type="library" name="mysql-connector-j-9.7.0" level="project" />
   </component>
 </module>

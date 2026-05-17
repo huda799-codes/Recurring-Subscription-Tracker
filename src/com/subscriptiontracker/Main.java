@@ -1,7 +1,7 @@
 package com.subscriptiontracker;
 
 import com.controller.SubscriptionController;
-import com.model.Subscription;
+import com.controller.FileController;
 
 import java.util.Scanner;
 
@@ -11,12 +11,15 @@ public class Main {
 
         Scanner input = new Scanner(System.in);
 
-        SubscriptionController controller =
+        SubscriptionController subscriptionController =
                 new SubscriptionController();
 
-        System.out.println("=================================");
-        System.out.println(" RECURRING SUBSCRIPTION TRACKER ");
-        System.out.println("=================================");
+        FileController fileController =
+                new FileController();
+
+        System.out.println("========================================");
+        System.out.println("   RECURRING SUBSCRIPTION TRACKER");
+        System.out.println("========================================");
 
         System.out.print("Enter Service Name: ");
         String serviceName = input.nextLine();
@@ -35,18 +38,31 @@ public class Main {
         System.out.print("Enter Next Billing Date (YYYY-MM-DD): ");
         String nextBillingDate = input.nextLine();
 
-        Subscription subscription =
-                new Subscription(
-                        serviceName,
-                        amount,
-                        category,
-                        billingCycle,
-                        nextBillingDate
-                );
+        subscriptionController.addSubscription(
+                serviceName,
+                amount,
+                category,
+                billingCycle,
+                nextBillingDate
+        );
 
-        controller.addSubscription(subscription);
+        String report =
+                "Subscription Added -> " +
+                        serviceName +
+                        " | " +
+                        amount +
+                        " | " +
+                        category;
+
+        fileController.saveReport(report);
 
         System.out.println();
-        System.out.println("Subscription Saved Successfully!");
+        System.out.println("========================================");
+        System.out.println(" Subscription Saved Successfully!");
+        System.out.println(" Data Stored In MySQL Database");
+        System.out.println(" Report Stored In reports.txt");
+        System.out.println("========================================");
+
+        input.close();
     }
 }

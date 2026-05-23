@@ -1,10 +1,45 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-
-</body>
-</html>
+<!-- Dashboard Content Template -->
+<!-- Note: The dashboard is rendered dynamically by script.js -->
+<!-- This file is kept as a reference for the dashboard structure -->
+<div class="dashboard-grid">
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-icon"><i class="fas fa-credit-card"></i></div>
+            <h3>Active Subscriptions</h3>
+            <div class="value" id="statActiveCount">0</div>
+            <div class="trend">Total plans</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon"><i class="fas fa-dollar-sign"></i></div>
+            <h3>Monthly Spend</h3>
+            <div class="value" id="statMonthlySpend">$0</div>
+            <div class="trend" id="statAvgPerSub">$0 avg/sub</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon"><i class="fas fa-chart-line"></i></div>
+            <h3>Yearly Projection</h3>
+            <div class="value" id="statYearlyTotal">$0</div>
+            <div class="trend">Annual forecast</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon"><i class="fas fa-bell"></i></div>
+            <h3>Upcoming Renewals</h3>
+            <div class="value" id="statUpcomingCount">0</div>
+            <div class="trend">Next 7 days</div>
+        </div>
+    </div>
+    <div class="charts-row">
+        <div class="chart-card">
+            <h3><i class="fas fa-chart-pie"></i> Category Distribution</h3>
+            <canvas id="pieCanvas"></canvas>
+        </div>
+        <div class="chart-card">
+            <h3><i class="fas fa-chart-line"></i> 6-Month Trend</h3>
+            <canvas id="lineCanvas"></canvas>
+        </div>
+    </div>
+    <div class="renewals-card">
+        <h3><i class="fas fa-clock"></i> Upcoming Renewals (7 days)</h3>
+        <div id="renewalList"></div>
+    </div>
+</div>

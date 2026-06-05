@@ -5,31 +5,38 @@ import com.model.Subscription;
 
 public class SubscriptionController {
 
-    SubscriptionDAO dao = new SubscriptionDAO();
+    private SubscriptionDAO dao;
 
-    public void addSubscription(String serviceName,
-                                double amount,
-                                String category,
-                                String billingCycle,
-                                String nextBillingDate) {
+    public SubscriptionController() {
+        dao = new SubscriptionDAO();
+    }
 
-        Subscription subscription =
-                new Subscription(
-                        serviceName,
-                        amount,
-                        category,
-                        billingCycle,
-                        nextBillingDate
-                );
+    // ADD SUBSCRIPTION
+    public void addSubscription(
+            String serviceName,
+            double amount,
+            String category,
+            String billingCycle,
+            String nextBillingDate
+    ) {
+
+        Subscription subscription = new Subscription(
+                serviceName,
+                amount,
+                category,
+                billingCycle,
+                nextBillingDate
+        );
 
         dao.addSubscription(subscription);
     }
 
+    // OVERLOADED METHOD
     public void addSubscription(Subscription subscription) {
-
         dao.addSubscription(subscription);
-
     }
+
+    // UPDATE SUBSCRIPTION
     public void updateSubscription(
             int id,
             String serviceName,
@@ -39,17 +46,20 @@ public class SubscriptionController {
             String nextBillingDate
     ) {
 
-        dao.updateSubscription(
-                id,
-                serviceName,
-                amount,
-                category,
-                billingCycle,
-                nextBillingDate
-        );
-    }
-    public void deleteSubscription(int id) {
+        Subscription subscription = new Subscription();
 
+        subscription.setId(id);
+        subscription.setServiceName(serviceName);
+        subscription.setAmount(amount);
+        subscription.setCategory(category);
+        subscription.setBillingCycle(billingCycle);
+        subscription.setNextBillingDate(nextBillingDate);
+
+        dao.updateSubscription(subscription);
+    }
+
+    // DELETE SUBSCRIPTION
+    public void deleteSubscription(int id) {
         dao.deleteSubscription(id);
     }
 }

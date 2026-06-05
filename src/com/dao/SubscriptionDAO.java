@@ -84,6 +84,62 @@ public class SubscriptionDAO {
             e.printStackTrace();
         }
     }
+    public void updateSubscription(Subscription subscription) {
+
+        try {
+
+            Connection connection =
+                    DBConnection.getConnection();
+
+            String sql =
+                    "UPDATE subscriptions " +
+                            "SET service_name=?, amount=?, category=?, billing_cycle=?, next_billing_date=? " +
+                            "WHERE id=?";
+
+            PreparedStatement statement =
+                    connection.prepareStatement(sql);
+
+            statement.setString(
+                    1,
+                    subscription.getServiceName()
+            );
+
+            statement.setDouble(
+                    2,
+                    subscription.getAmount()
+            );
+
+            statement.setString(
+                    3,
+                    subscription.getCategory()
+            );
+
+            statement.setString(
+                    4,
+                    subscription.getBillingCycle()
+            );
+
+            statement.setString(
+                    5,
+                    subscription.getNextBillingDate()
+            );
+
+            statement.setInt(
+                    6,
+                    subscription.getId()
+            );
+
+            statement.executeUpdate();
+
+            connection.close();
+
+        }
+        catch(Exception e) {
+
+            e.printStackTrace();
+
+        }
+    }
     public void deleteSubscription(int id) {
 
         try {

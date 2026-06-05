@@ -46,6 +46,8 @@ public class SubscriptionController {
             String nextBillingDate
     ) {
 
+        System.out.println("UPDATE METHOD CALLED");
+
         Subscription subscription = new Subscription();
 
         subscription.setId(id);

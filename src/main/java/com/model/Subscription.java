@@ -2,27 +2,27 @@ package com.model;
 
 public class Subscription {
 
-    private int id;
+    private int    id;
     private String serviceName;
     private double amount;
     private String category;
     private String billingCycle;
     private String nextBillingDate;
-
-    public Subscription() {
-    }
+    private int    userId;
+    public Subscription() {}
 
     public Subscription(String serviceName,
                         double amount,
                         String category,
                         String billingCycle,
-                        String nextBillingDate) {
-
-        this.serviceName = serviceName;
-        this.amount = amount;
-        this.category = category;
-        this.billingCycle = billingCycle;
-        this.nextBillingDate = nextBillingDate;
+                        String nextBillingDate,
+                        int userId) {
+        this.serviceName      = serviceName;
+        this.amount           = amount;
+        this.category         = category;
+        this.billingCycle     = billingCycle;
+        this.nextBillingDate  = nextBillingDate;
+        this.userId           = userId;
     }
 
     public Subscription(int id,
@@ -30,66 +30,36 @@ public class Subscription {
                         double amount,
                         String category,
                         String billingCycle,
-                        String nextBillingDate) {
-
-        this.id = id;
-        this.serviceName = serviceName;
-        this.amount = amount;
-        this.category = category;
-        this.billingCycle = billingCycle;
-        this.nextBillingDate = nextBillingDate;
+                        String nextBillingDate,
+                        int userId) {
+        this.id               = id;
+        this.serviceName      = serviceName;
+        this.amount           = amount;
+        this.category         = category;
+        this.billingCycle     = billingCycle;
+        this.nextBillingDate  = nextBillingDate;
+        this.userId           = userId;
     }
 
-    public int getId() {
-        return id;
-    }
+    /* ── Getters & Setters ────────────────────────────────────────── */
+    public int getId()                         { return id; }
+    public void setId(int id)                  { this.id = id; }
 
-    public void setId(int id) {
-        this.id = id;
-    }
+    public String getServiceName()             { return serviceName; }
+    public void setServiceName(String v)       { this.serviceName = v; }
 
+    public double getAmount()                  { return amount; }
+    public void setAmount(double v)            { this.amount = v; }
 
-    public String getServiceName() {
-        return serviceName;
-    }
+    public String getCategory()                { return category; }
+    public void setCategory(String v)          { this.category = v; }
 
-    public void setServiceName(String serviceName) {
-        this.serviceName = serviceName;
-    }
+    public String getBillingCycle()            { return billingCycle; }
+    public void setBillingCycle(String v)      { this.billingCycle = v; }
 
+    public String getNextBillingDate()         { return nextBillingDate; }
+    public void setNextBillingDate(String v)   { this.nextBillingDate = v; }
 
-    public double getAmount() {
-        return amount;
-    }
-
-    public void setAmount(double amount) {
-        this.amount = amount;
-    }
-
-
-    public String getCategory() {
-        return category;
-    }
-
-    public void setCategory(String category) {
-        this.category = category;
-    }
-
-
-    public String getBillingCycle() {
-        return billingCycle;
-    }
-
-    public void setBillingCycle(String billingCycle) {
-        this.billingCycle = billingCycle;
-    }
-
-
-    public String getNextBillingDate() {
-        return nextBillingDate;
-    }
-
-    public void setNextBillingDate(String nextBillingDate) {
-        this.nextBillingDate = nextBillingDate;
-    }
+    public int getUserId()                     { return userId; }
+    public void setUserId(int v)               { this.userId = v; }
 }

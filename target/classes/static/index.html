@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SaveX | Login</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="login-page">
+    <nav class="auth-brand">
+        <div class="brand-icon">
+            <i class="fa-solid fa-chart-line"></i>
+        </div>
+        <h2>Save<span>X</span></h2>
+    </nav>
+
+    <div class="auth-hero">
+
+        <p class="hero-tag">
+            <i class="fa-solid fa-circle"></i>
+            Subscription command center
+        </p>
+
+        <h1>Control your recurring payments smarter.</h1>
+
+        <p>
+            SaveX helps you track subscriptions, detect unnecessary spending,
+            manage upcoming renewals, and understand your monthly budget.
+        </p>
+
+    </div>
+
+
+    <div class="login-right-panel">
+
+        <div class="auth-card">
+
+            <div class="auth-tabs">
+                <button type="button" class="auth-tab active" id="loginTab">Login</button>
+                <button type="button" class="auth-tab" id="signupTab">Create Account</button>
+            </div>
+
+            <form id="loginForm" class="auth-form active">
+
+                <h2>Welcome back</h2>
+                <p class="auth-subtitle">Login to continue to your SaveX dashboard.</p>
+
+                <div class="form-group">
+                    <label for="loginEmail">Email Address</label>
+                    <input type="email" id="loginEmail" placeholder="example@email.com" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="loginPassword">Password</label>
+
+                    <div class="password-box">
+                        <input type="password" id="loginPassword" placeholder="Enter password" required>
+
+                        <button type="button" class="toggle-password" data-target="loginPassword">
+                            <i class="fa-solid fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="auth-options">
+                    <label class="remember-box">
+                        <input type="checkbox" id="rememberMe">
+                        <span>Remember me</span>
+                    </label>
+
+                    <button type="button" class="text-btn" id="forgotBtn">
+                        Forgot password?
+                    </button>
+                </div>
+
+                <button type="submit" class="primary-btn full-btn">
+                    <i class="fa-solid fa-right-to-bracket"></i>
+                    Login
+                </button>
+
+                <button type="button" class="demo-login-btn" id="demoLoginBtn">
+                    Use Demo Account
+                </button>
+
+            </form>
+
+            <form id="signupForm" class="auth-form">
+
+                <h2>Create account</h2>
+                <p class="auth-subtitle">Create your SaveX account and start tracking subscriptions.</p>
+
+                <div class="form-group">
+                    <label for="signupName">Full Name</label>
+                    <input type="text" id="signupName" placeholder="Enter your full name" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="signupEmail">Email Address</label>
+                    <input type="email" id="signupEmail" placeholder="example@email.com" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="signupPassword">Password</label>
+
+                    <div class="password-box">
+                        <input type="password" id="signupPassword" placeholder="Create password" required>
+
+                        <button type="button" class="toggle-password" data-target="signupPassword">
+                            <i class="fa-solid fa-eye"></i>
+                        </button>
+                    </div>
+
+                    <small class="password-hint">Password must be at least 6 characters.</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm Password</label>
+
+                    <div class="password-box">
+                        <input type="password" id="confirmPassword" placeholder="Confirm password" required>
+
+                        <button type="button" class="toggle-password" data-target="confirmPassword">
+                            <i class="fa-solid fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <button type="submit" class="primary-btn full-btn">
+                    <i class="fa-solid fa-user-plus"></i>
+                    Create Account
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+<div class="toast" id="authToast"></div>
+
+<script>
+    const loginTab = document.getElementById("loginTab");
+    const signupTab = document.getElementById("signupTab");
+    const loginForm = document.getElementById("loginForm");
+    const signupForm = document.getElementById("signupForm");
+    const authToast = document.getElementById("authToast");
+
+    function showAuthToast(message) {
+        authToast.textContent = message;
+        authToast.classList.add("show");
+
+        setTimeout(function () {
+            authToast.classList.remove("show");
+        }, 2500);
+    }
+
+    function showLogin() {
+        loginTab.classList.add("active");
+        signupTab.classList.remove("active");
+
+        loginForm.classList.add("active");
+        signupForm.classList.remove("active");
+    }
+
+    function showSignup() {
+        signupTab.classList.add("active");
+        loginTab.classList.remove("active");
+
+        signupForm.classList.add("active");
+        loginForm.classList.remove("active");
+    }
+
+    loginTab.addEventListener("click", showLogin);
+    signupTab.addEventListener("click", showSignup);
+
+    document.querySelectorAll(".toggle-password").forEach(function (button) {
+        button.addEventListener("click", function () {
+            const targetId = button.getAttribute("data-target");
+            const input = document.getElementById(targetId);
+            const icon = button.querySelector("i");
+
+            if (input.type === "password") {
+                input.type = "text";
+                icon.classList.remove("fa-eye");
+                icon.classList.add("fa-eye-slash");
+            } else {
+                input.type = "password";
+                icon.classList.remove("fa-eye-slash");
+                icon.classList.add("fa-eye");
+            }
+        });
+    });
+
+    signupForm.addEventListener("submit", function (event) {
+        event.preventDefault();
+
+        const name = document.getElementById("signupName").value.trim();
+        const email = document.getElementById("signupEmail").value.trim().toLowerCase();
+        const password = document.getElementById("signupPassword").value.trim();
+        const confirmPassword = document.getElementById("confirmPassword").value.trim();
+
+        if (name === "" || email === "" || password === "" || confirmPassword === "") {
+            showAuthToast("Please fill all fields.");
+            return;
+        }
+
+        if (password.length < 6) {
+            showAuthToast("Password must be at least 6 characters.");
+            return;
+        }
+
+        if (password !== confirmPassword) {
+            showAuthToast("Passwords do not match.");
+            return;
+        }
+
+        const user = {
+            name: name,
+            email: email,
+            password: password
+        };
+
+        localStorage.setItem("savex_user_account", JSON.stringify(user));
+        localStorage.setItem("subtracker_user_name", name);
+        localStorage.setItem("subtracker_user_email", email);
+        localStorage.setItem("savex_logged_in", "true");
+
+        showAuthToast("Account created successfully.");
+
+        setTimeout(function () {
+            window.location.href = "dashboard.html";
+        }, 800);
+    });
+
+    loginForm.addEventListener("submit", function (event) {
+        event.preventDefault();
+
+        const email = document.getElementById("loginEmail").value.trim().toLowerCase();
+        const password = document.getElementById("loginPassword").value.trim();
+        const rememberMe = document.getElementById("rememberMe").checked;
+
+        const savedUser = JSON.parse(localStorage.getItem("savex_user_account"));
+
+        if (!savedUser) {
+            showAuthToast("No account found. Please create an account first.");
+            return;
+        }
+
+        if (email !== savedUser.email || password !== savedUser.password) {
+            showAuthToast("Invalid email or password.");
+            return;
+        }
+
+        localStorage.setItem("subtracker_user_name", savedUser.name);
+        localStorage.setItem("subtracker_user_email", savedUser.email);
+        localStorage.setItem("savex_logged_in", "true");
+
+        if (rememberMe) {
+            localStorage.setItem("savex_remember_email", email);
+        } else {
+            localStorage.removeItem("savex_remember_email");
+        }
+
+        showAuthToast("Login successful.");
+
+        setTimeout(function () {
+            window.location.href = "dashboard.html";
+        }, 700);
+    });
+
+    document.getElementById("demoLoginBtn").addEventListener("click", function () {
+        const demoUser = {
+            name: "Huda Faisal",
+            email: "demo@savex.com",
+            password: "123456"
+        };
+
+        localStorage.setItem("savex_user_account", JSON.stringify(demoUser));
+        localStorage.setItem("subtracker_user_name", demoUser.name);
+        localStorage.setItem("subtracker_user_email", demoUser.email);
+        localStorage.setItem("savex_logged_in", "true");
+
+        window.location.href = "dashboard.html";
+    });
+
+    document.getElementById("forgotBtn").addEventListener("click", function () {
+        showAuthToast("Demo project: create a new account if you forgot password.");
+    });
+
+    window.addEventListener("load", function () {
+        const rememberedEmail = localStorage.getItem("savex_remember_email");
+
+        if (rememberedEmail) {
+            document.getElementById("loginEmail").value = rememberedEmail;
+            document.getElementById("rememberMe").checked = true;
+        }
+    });
+</script>
+
+</body>
+</html>

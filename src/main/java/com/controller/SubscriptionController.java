@@ -25,7 +25,10 @@ public class SubscriptionController {
     }
 
     @GetMapping
-    public List<Subscription> getAllSubscriptions() {
+    public List<Subscription> getAllSubscriptions(@RequestParam(value = "userId", required = false) Integer userId) {
+        if (userId != null) {
+            return service.getAllSubscriptions(userId);
+        }
         return service.getAllSubscriptions();
     }
 

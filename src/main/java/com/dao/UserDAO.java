@@ -12,22 +12,23 @@ import java.sql.ResultSet;
 public class UserDAO {
 
     public boolean addUser(User user) {
-        try {
-            Connection connection = DBConnection.getConnection();
 
-            String query =
-                    "INSERT INTO users (username, email, password) VALUES (?, ?, ?)";
+        String query = "INSERT INTO users (username, email, password) VALUES (?, ?, ?)";
 
-            PreparedStatement ps = connection.prepareStatement(query);
+        try (
+                Connection connection = DBConnection.getConnection();
+                PreparedStatement ps = connection.prepareStatement(query)
+        ) {
+
             ps.setString(1, user.getUsername());
             ps.setString(2, user.getEmail());
             ps.setString(3, user.getPassword());
 
-            ps.executeUpdate();
-            connection.close();
+            int rows = ps.executeUpdate();
 
             System.out.println("User registered: " + user.getEmail());
-            return true;
+
+            return rows > 0;
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -35,31 +36,29 @@ public class UserDAO {
         }
     }
 
-    /**
-     * Find a user by email (used during login).
-     */
     public User findByEmail(String email) {
-        try {
-            Connection connection = DBConnection.getConnection();
 
-            String query = "SELECT * FROM users WHERE email = ?";
+        String query = "SELECT * FROM users WHERE email = ?";
 
-            PreparedStatement ps = connection.prepareStatement(query);
+        try (
+                Connection connection = DBConnection.getConnection();
+                PreparedStatement ps = connection.prepareStatement(query)
+        ) {
+
             ps.setString(1, email);
 
             ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
                 User user = new User();
+
                 user.setId(rs.getInt("id"));
                 user.setUsername(rs.getString("username"));
                 user.setEmail(rs.getString("email"));
                 user.setPassword(rs.getString("password"));
-                connection.close();
+
                 return user;
             }
-
-            connection.close();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -68,9 +67,6 @@ public class UserDAO {
         return null;
     }
 
-    /**
-     * Check if an email is already registered.
-     */
     public boolean emailExists(String email) {
         return findByEmail(email) != null;
     }

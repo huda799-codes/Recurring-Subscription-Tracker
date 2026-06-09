@@ -257,8 +257,8 @@
 </div>
 
 <div class="toast" id="authToast"></div>
-
 <script>
+    const AUTH_URL = "http://localhost:8080/api/auth";
 
     const loginTab = document.getElementById("loginTab");
     const signupTab = document.getElementById("signupTab");
@@ -269,7 +269,6 @@
     const authToast = document.getElementById("authToast");
 
     function showAuthToast(message, type) {
-
         authToast.textContent = message;
         authToast.className = "toast show" + (type ? " toast-" + type : "");
 
@@ -279,7 +278,6 @@
     }
 
     function showLogin() {
-
         loginTab.classList.add("active");
         signupTab.classList.remove("active");
 
@@ -288,7 +286,6 @@
     }
 
     function showSignup() {
-
         signupTab.classList.add("active");
         loginTab.classList.remove("active");
 
@@ -300,9 +297,7 @@
     signupTab.addEventListener("click", showSignup);
 
     document.querySelectorAll(".toggle-password").forEach(function (button) {
-
         button.addEventListener("click", function () {
-
             const targetId = button.getAttribute("data-target");
             const input = document.getElementById(targetId);
             const icon = button.querySelector("i");
@@ -317,8 +312,7 @@
         });
     });
 
-    loginForm.addEventListener("submit", function (e) {
-
+    loginForm.addEventListener("submit", async function (e) {
         e.preventDefault();
 
         const email = document.getElementById("loginEmail").value.trim();
@@ -329,27 +323,47 @@
             return;
         }
 
-        localStorage.setItem("savex_logged_in", "true");
-        localStorage.setItem("subtracker_user_email", email);
+        try {
+            const response = await fetch(AUTH_URL + "/login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    email: email,
+                    password: password
+                })
+            });
 
-        const savedName =
-            localStorage.getItem("subtracker_user_name") || "SaveX User";
+            const data = await response.json();
 
-        localStorage.setItem("subtracker_user_name", savedName);
+            if (!response.ok || data.success !== true) {
+                showAuthToast(data.message || "Login failed.", "error");
+                return;
+            }
 
-        if (document.getElementById("rememberMe").checked) {
-            localStorage.setItem("savex_remember_email", email);
+            localStorage.setItem("savex_logged_in", "true");
+            localStorage.setItem("savex_user_id", data.userId);
+            localStorage.setItem("subtracker_user_name", data.username);
+            localStorage.setItem("subtracker_user_email", data.email);
+
+            if (document.getElementById("rememberMe").checked) {
+                localStorage.setItem("savex_remember_email", email);
+            }
+
+            showAuthToast("Login successful. Redirecting...", "success");
+
+            setTimeout(function () {
+                window.location.href = "dashboard.html";
+            }, 700);
+
+        } catch (error) {
+            console.error(error);
+            showAuthToast("Backend not connected. Start Spring Boot first.", "error");
         }
-
-        showAuthToast("Login successful. Redirecting...", "success");
-
-        setTimeout(function () {
-            window.location.href = "dashboard.html";
-        }, 700);
     });
 
-    signupForm.addEventListener("submit", function (e) {
-
+    signupForm.addEventListener("submit", async function (e) {
         e.preventDefault();
 
         const name = document.getElementById("signupName").value.trim();
@@ -372,20 +386,46 @@
             return;
         }
 
-        localStorage.setItem("savex_logged_in", "true");
-        localStorage.setItem("subtracker_user_name", name);
-        localStorage.setItem("subtracker_user_email", email);
+        try {
+            const response = await fetch(AUTH_URL + "/signup", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    username: name,
+                    email: email,
+                    password: password
+                })
+            });
 
-        showAuthToast("Account created. Redirecting...", "success");
+            const data = await response.json();
 
-        setTimeout(function () {
-            window.location.href = "dashboard.html";
-        }, 700);
+            if (!response.ok || data.success !== true) {
+                showAuthToast(data.message || "Signup failed.", "error");
+                return;
+            }
+
+            localStorage.setItem("savex_logged_in", "true");
+            localStorage.setItem("savex_user_id", data.userId);
+            localStorage.setItem("subtracker_user_name", data.username);
+            localStorage.setItem("subtracker_user_email", data.email);
+
+            showAuthToast("Account created. Redirecting...", "success");
+
+            setTimeout(function () {
+                window.location.href = "dashboard.html";
+            }, 700);
+
+        } catch (error) {
+            console.error(error);
+            showAuthToast("Backend not connected. Start Spring Boot first.", "error");
+        }
     });
 
     document.getElementById("demoLoginBtn").addEventListener("click", function () {
-
         localStorage.setItem("savex_logged_in", "true");
+        localStorage.setItem("savex_user_id", "0");
         localStorage.setItem("subtracker_user_name", "SaveX User");
         localStorage.setItem("subtracker_user_email", "demo@savex.com");
 
@@ -401,16 +441,13 @@
     });
 
     window.addEventListener("load", function () {
-
-        const rememberedEmail =
-            localStorage.getItem("savex_remember_email");
+        const rememberedEmail = localStorage.getItem("savex_remember_email");
 
         if (rememberedEmail) {
             document.getElementById("loginEmail").value = rememberedEmail;
             document.getElementById("rememberMe").checked = true;
         }
     });
-
 </script>
 
 </body>

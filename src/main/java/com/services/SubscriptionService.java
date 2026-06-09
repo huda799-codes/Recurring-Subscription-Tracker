@@ -23,10 +23,6 @@ public class SubscriptionService {
         return dao.getAllSubscriptions();
     }
 
-    public List<Subscription> getAllSubscriptions(int userId) {
-        return dao.getAllSubscriptions(userId);
-    }
-
     public void updateSubscription(Subscription subscription) {
         dao.updateSubscription(subscription);
     }

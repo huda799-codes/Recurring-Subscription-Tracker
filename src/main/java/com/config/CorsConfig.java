@@ -14,7 +14,7 @@ public class CorsConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedOriginPatterns("*")
+                        .allowedOriginPatterns("*")   // ← allows file:// and all localhost ports
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .allowedHeaders("*")
                         .allowCredentials(false);

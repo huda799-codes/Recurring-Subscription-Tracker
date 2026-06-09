@@ -13,116 +13,121 @@ import java.util.List;
 @Repository
 public class SubscriptionDAO {
 
-    /* ── Helper: map ResultSet row → Subscription object ─────────── */
-    private Subscription mapRow(ResultSet rs) throws Exception {
-        Subscription s = new Subscription();
-        s.setId(rs.getInt("id"));
-        s.setServiceName(rs.getString("service_name"));
-        s.setAmount(rs.getDouble("amount"));
-        s.setCategory(rs.getString("category"));
-        s.setBillingCycle(rs.getString("billing_cycle"));
-        s.setNextBillingDate(rs.getString("next_billing_date"));
-        s.setUserId(rs.getInt("user_id"));
-        return s;
-    }
-
-    /* ── INSERT ───────────────────────────────────────────────────── */
     public void addSubscription(Subscription subscription) {
+
         try {
-            Connection connection = DBConnection.getConnection();
+
+            Connection connection =
+                    DBConnection.getConnection();
+
+            if (connection == null) {
+                System.out.println("Connection is null. Data not inserted.");
+                return;
+            }
 
             String query =
-                "INSERT INTO subscriptions " +
-                "(service_name, amount, category, billing_cycle, next_billing_date, user_id) " +
-                "VALUES (?, ?, ?, ?, ?, ?)";
+                    "INSERT INTO subscriptions(service_name, amount, category, billing_cycle, next_billing_date) " +
+                            "VALUES (?, ?, ?, ?, ?)";
 
-            PreparedStatement ps = connection.prepareStatement(query);
+            PreparedStatement ps =
+                    connection.prepareStatement(query);
+
             ps.setString(1, subscription.getServiceName());
             ps.setDouble(2, subscription.getAmount());
             ps.setString(3, subscription.getCategory());
             ps.setString(4, subscription.getBillingCycle());
             ps.setString(5, subscription.getNextBillingDate());
-            ps.setInt(6, subscription.getUserId());
 
-            ps.executeUpdate();
-            connection.close();
+            int rows =
+                    ps.executeUpdate();
 
-            System.out.println("Subscription saved for userId=" + subscription.getUserId());
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    /* ── SELECT ALL for a specific user ──────────────────────────── */
-    public List<Subscription> getAllSubscriptions(int userId) {
-        List<Subscription> list = new ArrayList<>();
-
-        try {
-            Connection connection = DBConnection.getConnection();
-
-            String query = "SELECT * FROM subscriptions WHERE user_id = ? ORDER BY id DESC";
-
-            PreparedStatement ps = connection.prepareStatement(query);
-            ps.setInt(1, userId);
-
-            ResultSet rs = ps.executeQuery();
-
-            while (rs.next()) {
-                list.add(mapRow(rs));
-            }
+            System.out.println("Rows Inserted = " + rows);
 
             connection.close();
 
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        return list;
     }
 
-    /* ── SELECT ALL (no filter — kept for backward compat) ────────── */
     public List<Subscription> getAllSubscriptions() {
-        List<Subscription> list = new ArrayList<>();
+
+        List<Subscription> list =
+                new ArrayList<>();
 
         try {
-            Connection connection = DBConnection.getConnection();
-            PreparedStatement ps = connection.prepareStatement("SELECT * FROM subscriptions ORDER BY id DESC");
-            ResultSet rs = ps.executeQuery();
 
-            while (rs.next()) {
-                list.add(mapRow(rs));
+            Connection connection =
+                    DBConnection.getConnection();
+
+            if (connection == null) {
+                System.out.println("Connection is null. Data not loaded.");
+                return list;
             }
-
-            connection.close();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return list;
-    }
-
-    /* ── UPDATE ───────────────────────────────────────────────────── */
-    public void updateSubscription(Subscription subscription) {
-        try {
-            Connection connection = DBConnection.getConnection();
 
             String query =
-                "UPDATE subscriptions " +
-                "SET service_name=?, amount=?, category=?, billing_cycle=?, next_billing_date=? " +
-                "WHERE id=? AND user_id=?";
+                    "SELECT * FROM subscriptions";
 
-            PreparedStatement ps = connection.prepareStatement(query);
+            PreparedStatement ps =
+                    connection.prepareStatement(query);
+
+            ResultSet rs =
+                    ps.executeQuery();
+
+            while (rs.next()) {
+
+                Subscription subscription =
+                        new Subscription();
+
+                subscription.setId(rs.getInt("id"));
+                subscription.setServiceName(rs.getString("service_name"));
+                subscription.setAmount(rs.getDouble("amount"));
+                subscription.setCategory(rs.getString("category"));
+                subscription.setBillingCycle(rs.getString("billing_cycle"));
+                subscription.setNextBillingDate(rs.getString("next_billing_date"));
+
+                list.add(subscription);
+            }
+
+            connection.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return list;
+    }
+
+    public void updateSubscription(Subscription subscription) {
+
+        try {
+
+            Connection connection =
+                    DBConnection.getConnection();
+
+            if (connection == null) {
+                System.out.println("Connection is null. Data not updated.");
+                return;
+            }
+
+            String query =
+                    "UPDATE subscriptions " +
+                            "SET service_name=?, amount=?, category=?, billing_cycle=?, next_billing_date=? " +
+                            "WHERE id=?";
+
+            PreparedStatement ps =
+                    connection.prepareStatement(query);
+
             ps.setString(1, subscription.getServiceName());
             ps.setDouble(2, subscription.getAmount());
             ps.setString(3, subscription.getCategory());
             ps.setString(4, subscription.getBillingCycle());
             ps.setString(5, subscription.getNextBillingDate());
             ps.setInt(6, subscription.getId());
-            ps.setInt(7, subscription.getUserId());
 
-            int rows = ps.executeUpdate();
+            int rows =
+                    ps.executeUpdate();
+
             System.out.println("Rows Updated = " + rows);
 
             connection.close();
@@ -132,16 +137,29 @@ public class SubscriptionDAO {
         }
     }
 
-    /* ── DELETE ───────────────────────────────────────────────────── */
     public void deleteSubscription(int id) {
+
         try {
-            Connection connection = DBConnection.getConnection();
+
+            Connection connection =
+                    DBConnection.getConnection();
+
+            if (connection == null) {
+                System.out.println("Connection is null. Data not deleted.");
+                return;
+            }
+
+            String query =
+                    "DELETE FROM subscriptions WHERE id=?";
 
             PreparedStatement ps =
-                connection.prepareStatement("DELETE FROM subscriptions WHERE id=?");
+                    connection.prepareStatement(query);
+
             ps.setInt(1, id);
 
-            int rows = ps.executeUpdate();
+            int rows =
+                    ps.executeUpdate();
+
             System.out.println("Rows Deleted = " + rows);
 
             connection.close();

@@ -537,7 +537,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     body: JSON.stringify(payload)
                 });
                 if (!res.ok) throw new Error("Add failed: " + res.status);
-                showToast(`✅ "${name}" added successfully.`, "success");
+                showToast(`"${name}" added successfully.`, "success");
             } else {
                 const id = subscriptionId ? subscriptionId.value : subscriptions[editIndex].id;
                 res = await fetch(`${API_URL}/${id}`, {
@@ -546,7 +546,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     body: JSON.stringify(payload)
                 });
                 if (!res.ok) throw new Error("Update failed: " + res.status);
-                showToast(`✏️ "${name}" updated successfully.`, "success");
+                showToast(` "${name}" updated successfully.`, "success");
             }
             await fetchSubscriptions();
             closeModal();
@@ -554,7 +554,7 @@ document.addEventListener("DOMContentLoaded", function () {
             updateBadge();
         } catch (err) {
             console.error("Save error:", err);
-            showToast("❌ Failed to save. Check backend console.", "error");
+            showToast(" Failed to save. Check backend console.", "error");
         }
     }
 
@@ -582,10 +582,10 @@ document.addEventListener("DOMContentLoaded", function () {
             await fetchSubscriptions();
             setPage(document.querySelector(".menu-item.active")?.dataset.page || "dashboard");
             updateBadge();
-            showToast(`🗑️ "${sub.name}" deleted.`, "error");
+            showToast(`"${sub.name}" deleted.`, "error");
         } catch (err) {
             console.error("Delete error:", err);
-            showToast("❌ Failed to delete. Check backend console.", "error");
+            showToast(" Failed to delete. Check backend console.", "error");
         }
     };
 

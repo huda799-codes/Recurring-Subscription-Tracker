@@ -43,7 +43,9 @@ document.addEventListener("DOMContentLoaded", function () {
         const welcomeEl  = document.getElementById("welcomeText");
         const profileNameEl   = document.getElementById("profileName");
         const profileAvatarEl = document.getElementById("profileAvatar");
-        if (welcomeEl)       welcomeEl.textContent = `Welcome back, ${firstName} `;
+        if (welcomeEl) {
+            welcomeEl.textContent = "Welcome back, " + firstName;
+        }
         if (profileNameEl)   profileNameEl.textContent = userName;
         if (profileAvatarEl) {
             profileAvatarEl.textContent = userName.split(" ")

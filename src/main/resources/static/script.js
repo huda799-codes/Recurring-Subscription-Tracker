@@ -43,10 +43,11 @@ document.addEventListener("DOMContentLoaded", function () {
         const welcomeEl  = document.getElementById("welcomeText");
         const profileNameEl   = document.getElementById("profileName");
         const profileAvatarEl = document.getElementById("profileAvatar");
-        if (welcomeEl)       welcomeEl.textContent = `Welcome back, ${firstName} ✨`;
+        if (welcomeEl)       welcomeEl.textContent = `Welcome back, ${firstName} `;
         if (profileNameEl)   profileNameEl.textContent = userName;
         if (profileAvatarEl) {
             profileAvatarEl.textContent = userName.split(" ")
+                .map(w => w.charAt(0).toUpperCase()).join("").slice(0, 2) || "SX";
                 .map(w => w.charAt(0).toUpperCase()).join("").slice(0, 2) || "SX";
         }
     }
@@ -68,7 +69,7 @@ document.addEventListener("DOMContentLoaded", function () {
             }));
         } catch (err) {
             console.error("Fetch error:", err);
-            showToast("⚠️ Cannot reach backend. Is Spring Boot running?", "error");
+            showToast("Cannot reach backend. Is Spring Boot running?", "error");
             subscriptions = [];
         }
     }

@@ -4,12 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SaveX | Login</title>
-
-    <meta name="description" content="SaveX – Smart subscription tracking. Control your recurring payments, detect unnecessary spending, and manage upcoming renewals.">
+    <meta name="description" content="SaveX – Smart subscription tracking for recurring payments and renewals.">
 
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
     <link rel="stylesheet" href="styles.css">
 </head>
@@ -18,22 +15,20 @@
 
 <div class="login-page">
 
-    <div class="login-left-panel">
+    <section class="login-left-panel">
 
         <nav class="auth-brand">
-
             <div class="brand-icon">
-                <i class="fa-solid fa-chart-line"></i>
+                <span data-icon="chart-line"></span>
             </div>
 
             <h2>Save<span>X</span></h2>
-
         </nav>
 
         <div class="auth-hero">
 
             <p class="hero-tag">
-                <i class="fa-solid fa-circle-dot"></i>
+                <span data-icon="circle-dot"></span>
                 Subscription command center
             </p>
 
@@ -43,24 +38,24 @@
             </h1>
 
             <p class="hero-desc">
-                SaveX helps you track subscriptions, detect unnecessary spending,
-                manage upcoming renewals, and understand your monthly budget.
+                Track subscriptions, monitor renewal dates, analyze spending patterns,
+                and manage your digital budget from one polished dashboard.
             </p>
 
             <div class="hero-features">
 
                 <div class="hero-feature">
-                    <i class="fa-solid fa-shield-check"></i>
-                    <span>Secure tracking</span>
+                    <span data-icon="shield-check"></span>
+                    <span>Secure account access</span>
                 </div>
 
                 <div class="hero-feature">
-                    <i class="fa-solid fa-brain"></i>
-                    <span>AI-powered insights</span>
+                    <span data-icon="chart-pie"></span>
+                    <span>Clean expense analytics</span>
                 </div>
 
                 <div class="hero-feature">
-                    <i class="fa-solid fa-bell"></i>
+                    <span data-icon="bell"></span>
                     <span>Renewal reminders</span>
                 </div>
 
@@ -68,11 +63,9 @@
 
         </div>
 
-        <div class="hero-glow"></div>
+    </section>
 
-    </div>
-
-    <div class="login-right-panel">
+    <section class="login-right-panel">
 
         <div class="auth-card">
 
@@ -81,7 +74,6 @@
                 <button type="button" class="auth-tab" id="signupTab">Create Account</button>
             </div>
 
-            <!-- Login Form -->
             <form id="loginForm" class="auth-form active">
 
                 <h2>Welcome back</h2>
@@ -95,7 +87,7 @@
                     <label for="loginEmail">Email Address</label>
 
                     <div class="input-icon-wrapper">
-                        <i class="fa-solid fa-envelope input-icon"></i>
+                        <span data-icon="envelope" class="input-icon"></span>
 
                         <input
                                 type="email"
@@ -112,7 +104,7 @@
                     <label for="loginPassword">Password</label>
 
                     <div class="password-box">
-                        <i class="fa-solid fa-lock input-icon"></i>
+                        <span data-icon="lock" class="input-icon"></span>
 
                         <input
                                 type="password"
@@ -121,8 +113,8 @@
                                 required
                         >
 
-                        <button type="button" class="toggle-password" data-target="loginPassword">
-                            <i class="fa-solid fa-eye"></i>
+                        <button type="button" class="toggle-password" data-target="loginPassword" aria-label="Show or hide password">
+                            <span data-icon="eye"></span>
                         </button>
                     </div>
 
@@ -132,7 +124,6 @@
 
                     <label class="remember-box">
                         <input type="checkbox" id="rememberMe">
-                        <span class="checkmark"></span>
                         <span>Remember me</span>
                     </label>
 
@@ -143,7 +134,7 @@
                 </div>
 
                 <button type="submit" class="primary-btn full-btn" id="loginSubmitBtn">
-                    <i class="fa-solid fa-right-to-bracket"></i>
+                    <span data-icon="right-to-bracket"></span>
                     Login
                 </button>
 
@@ -152,13 +143,12 @@
                 </div>
 
                 <button type="button" class="demo-login-btn" id="demoLoginBtn">
-                    <i class="fa-solid fa-flask"></i>
+                    <span data-icon="flask"></span>
                     Use Demo Account
                 </button>
 
             </form>
 
-            <!-- Signup Form -->
             <form id="signupForm" class="auth-form">
 
                 <h2>Create account</h2>
@@ -172,7 +162,7 @@
                     <label for="signupName">Full Name</label>
 
                     <div class="input-icon-wrapper">
-                        <i class="fa-solid fa-user input-icon"></i>
+                        <span data-icon="user" class="input-icon"></span>
 
                         <input
                                 type="text"
@@ -189,7 +179,7 @@
                     <label for="signupEmail">Email Address</label>
 
                     <div class="input-icon-wrapper">
-                        <i class="fa-solid fa-envelope input-icon"></i>
+                        <span data-icon="envelope" class="input-icon"></span>
 
                         <input
                                 type="email"
@@ -206,7 +196,7 @@
                     <label for="signupPassword">Password</label>
 
                     <div class="password-box">
-                        <i class="fa-solid fa-lock input-icon"></i>
+                        <span data-icon="lock" class="input-icon"></span>
 
                         <input
                                 type="password"
@@ -215,8 +205,8 @@
                                 required
                         >
 
-                        <button type="button" class="toggle-password" data-target="signupPassword">
-                            <i class="fa-solid fa-eye"></i>
+                        <button type="button" class="toggle-password" data-target="signupPassword" aria-label="Show or hide password">
+                            <span data-icon="eye"></span>
                         </button>
                     </div>
 
@@ -227,7 +217,7 @@
                     <label for="confirmPassword">Confirm Password</label>
 
                     <div class="password-box">
-                        <i class="fa-solid fa-lock input-icon"></i>
+                        <span data-icon="lock" class="input-icon"></span>
 
                         <input
                                 type="password"
@@ -236,15 +226,15 @@
                                 required
                         >
 
-                        <button type="button" class="toggle-password" data-target="confirmPassword">
-                            <i class="fa-solid fa-eye"></i>
+                        <button type="button" class="toggle-password" data-target="confirmPassword" aria-label="Show or hide password">
+                            <span data-icon="eye"></span>
                         </button>
                     </div>
 
                 </div>
 
                 <button type="submit" class="primary-btn full-btn">
-                    <i class="fa-solid fa-user-plus"></i>
+                    <span data-icon="user-plus"></span>
                     Create Account
                 </button>
 
@@ -252,11 +242,14 @@
 
         </div>
 
-    </div>
+    </section>
 
 </div>
 
 <div class="toast" id="authToast"></div>
+
+<script src="svg-icons.js"></script>
+
 <script>
     const AUTH_URL = "http://localhost:8080/api/auth";
 
@@ -300,14 +293,18 @@
         button.addEventListener("click", function () {
             const targetId = button.getAttribute("data-target");
             const input = document.getElementById(targetId);
-            const icon = button.querySelector("i");
+            const currentIcon = button.querySelector("[data-icon]");
 
             if (input.type === "password") {
                 input.type = "text";
-                icon.classList.replace("fa-eye", "fa-eye-slash");
+                currentIcon.setAttribute("data-icon", "eye-slash");
             } else {
                 input.type = "password";
-                icon.classList.replace("fa-eye-slash", "fa-eye");
+                currentIcon.setAttribute("data-icon", "eye");
+            }
+
+            if (window.SavexIcons) {
+                window.SavexIcons.refresh();
             }
         });
     });
@@ -437,7 +434,7 @@
     });
 
     document.getElementById("forgotBtn").addEventListener("click", function () {
-        showAuthToast("Create a new account if you forgot your password.", "error");
+        showAuthToast("Please create a new account if you forgot your password.", "error");
     });
 
     window.addEventListener("load", function () {

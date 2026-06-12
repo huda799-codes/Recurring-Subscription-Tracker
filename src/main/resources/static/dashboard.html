@@ -5,14 +5,11 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-
     <title>SaveX | Dashboard</title>
 
     <meta name="description" content="SaveX Dashboard – Manage and track all your subscriptions in one place.">
 
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
@@ -23,7 +20,6 @@
 
 <div class="dashboard-layout">
 
-    <!-- Sidebar -->
     <aside class="sidebar">
 
         <div class="sidebar-scroll-area">
@@ -31,7 +27,7 @@
             <div class="sidebar-logo">
 
                 <div class="logo-box">
-                    <i class="fa-solid fa-chart-line"></i>
+                    <span data-icon="chart-line"></span>
                 </div>
 
                 <h2>Save<span>X</span></h2>
@@ -41,27 +37,27 @@
             <nav class="sidebar-menu">
 
                 <button type="button" class="menu-item active" data-page="dashboard">
-                    <i class="fa-solid fa-gauge-high"></i>
+                    <span data-icon="gauge-high"></span>
                     <span>Dashboard</span>
                 </button>
 
                 <button type="button" class="menu-item" data-page="subscriptions">
-                    <i class="fa-solid fa-credit-card"></i>
+                    <span data-icon="credit-card"></span>
                     <span>Subscriptions</span>
                 </button>
 
                 <button type="button" class="menu-item" data-page="analytics">
-                    <i class="fa-solid fa-chart-pie"></i>
+                    <span data-icon="chart-pie"></span>
                     <span>Analytics</span>
                 </button>
 
                 <button type="button" class="menu-item" data-page="insights">
-                    <i class="fa-solid fa-brain"></i>
+                    <span data-icon="brain"></span>
                     <span>AI Insights</span>
                 </button>
 
                 <button type="button" class="menu-item" data-page="reminders">
-                    <i class="fa-solid fa-bell"></i>
+                    <span data-icon="bell"></span>
                     <span>Reminders</span>
                 </button>
 
@@ -75,13 +71,13 @@
 
                     <div>
                         <h4 id="profileName">SaveX User</h4>
-                        <p>Premium Member</p>
+                        <p>Active Member</p>
                     </div>
 
                 </div>
 
                 <button type="button" class="logout-btn" id="logoutBtn">
-                    <i class="fa-solid fa-right-from-bracket"></i>
+                    <span data-icon="right-from-bracket"></span>
                     Logout
                 </button>
 
@@ -91,7 +87,6 @@
 
     </aside>
 
-    <!-- Main Panel -->
     <main class="main-panel">
 
         <header class="top-header">
@@ -99,18 +94,18 @@
             <div>
                 <p class="eyebrow">SaveX command center</p>
                 <h1 id="pageTitle">Dashboard</h1>
-                <p id="welcomeText">Welcome back </p>
+                <p id="welcomeText">Welcome back</p>
             </div>
 
             <div class="top-actions">
 
-                <button type="button" class="notification-btn" id="notificationBtn">
-                    <i class="fa-solid fa-bell"></i>
+                <button type="button" class="notification-btn" id="notificationBtn" aria-label="Open reminders">
+                    <span data-icon="bell"></span>
                     <span id="notificationBadge">0</span>
                 </button>
 
                 <button type="button" class="primary-btn" id="openModalBtn">
-                    <i class="fa-solid fa-plus"></i>
+                    <span data-icon="plus"></span>
                     Add Subscription
                 </button>
 
@@ -124,7 +119,6 @@
 
 </div>
 
-<!-- Add / Edit Modal -->
 <div class="modal-overlay" id="modalOverlay">
 
     <div class="modal" id="subscriptionModal">
@@ -132,19 +126,18 @@
         <div class="modal-header">
 
             <h3 id="modalTitle">
-                <i class="fa-solid fa-plus-circle"></i>
+                <span data-icon="plus-circle"></span>
                 Add Subscription
             </h3>
 
-            <button type="button" id="closeModalBtn" class="modal-close-btn">
-                <i class="fa-solid fa-xmark"></i>
+            <button type="button" id="closeModalBtn" class="modal-close-btn" aria-label="Close modal">
+                <span data-icon="xmark"></span>
             </button>
 
         </div>
 
         <form id="subscriptionForm">
 
-            <!-- IMPORTANT: This hidden field is needed for Edit/Update -->
             <input type="hidden" id="subscriptionId">
 
             <div class="form-group">
@@ -164,7 +157,7 @@
 
                 <div class="form-group">
 
-                    <label for="serviceAmount">Amount ($)</label>
+                    <label for="serviceAmount">Amount</label>
 
                     <input
                             type="number"
@@ -231,7 +224,7 @@
                 </button>
 
                 <button type="submit" class="primary-btn">
-                    <i class="fa-solid fa-floppy-disk"></i>
+                    <span data-icon="floppy-disk"></span>
                     Save
                 </button>
 
@@ -245,6 +238,7 @@
 
 <div class="toast" id="toast"></div>
 
+<script src="svg-icons.js"></script>
 <script src="script.js"></script>
 
 </body>
